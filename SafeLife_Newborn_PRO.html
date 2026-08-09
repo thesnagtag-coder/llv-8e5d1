@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SafeLife — Newborn (0–28 Days) · PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* THEME ENGINE */
+:root {
+  --navy:#0D1B2A; --navy-mid:#1A2F45;
+  --critical:#DC2626; --high:#EA580C; --medium:#D97706; --low:#16A34A;
+  --radius:12px;
+  --shadow:0 2px 12px rgba(13,27,42,0.08);
+  --shadow-lg:0 8px 32px rgba(13,27,42,0.14);
+}
+body[data-theme="sky"]    { --accent:#0EA5E9; --accent-dark:#0369A1; --accent-rgb:14,165,233; }
+body[data-theme="teal"]   { --accent:#14B8A6; --accent-dark:#0D9488; --accent-rgb:20,184,166; }
+body[data-theme="amber"]  { --accent:#F59E0B; --accent-dark:#D97706; --accent-rgb:245,158,11; }
+body[data-theme="rose"]   { --accent:#E11D48; --accent-dark:#BE123C; --accent-rgb:225,29,72; }
+body[data-theme="violet"] { --accent:#7C3AED; --accent-dark:#6D28D9; --accent-rgb:124,58,237; }
+body[data-theme="ocean"]  { --accent:#2563EB; --accent-dark:#1D4ED8; --accent-rgb:37,99,235; }
+body[data-theme="forest"] { --accent:#16A34A; --accent-dark:#15803D; --accent-rgb:22,163,74; }
+body[data-mode="light"] {
+  --bg:#F9F6F0; --surface:#FFFFFF; --surface-2:#EDE6D6; --tile:#F9F6F0;
+  --ink:#0D1B2A; --ink-mid:#3A4A5C; --ink-soft:#6B7A8D; --line:#EDE6D6;
+  --critical-bg:#FEF2F2; --high-bg:#FFF7ED; --medium-bg:#FFFBEB; --low-bg:#F0FDF4;
+}
+body[data-mode="dark"] {
+  --bg:#0B1420; --surface:#13202F; --surface-2:#1C2C3E; --tile:#0F1A28;
+  --ink:#EDF2F7; --ink-mid:#B7C4D1; --ink-soft:#8194A7; --line:#243549;
+  --critical-bg:rgba(220,38,38,.16); --high-bg:rgba(234,88,12,.16);
+  --medium-bg:rgba(217,119,6,.16); --low-bg:rgba(22,163,74,.16);
+  --shadow:0 2px 12px rgba(0,0,0,0.35); --shadow-lg:0 8px 32px rgba(0,0,0,0.5);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s;}
+.topbar{background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 20px;min-height:58px;position:relative;z-index:300;border-bottom:2px solid var(--accent);flex-wrap:wrap;}
+.topbar-brand{display:flex;align-items:center;gap:12px;}
+.topbar-logo{width:34px;height:34px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;font-family:'Sora',sans-serif;color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.4);}
+.topbar-name{font-family:'Sora',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.3px;}
+.topbar-name span{color:var(--accent);}
+.topbar-tagline{font-size:11px;color:rgba(255,255,255,.5);font-style:italic;}
+.topbar-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.progress-pill{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.3);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.progress-pill span{color:#fff;font-size:13px;}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;}
+.tool-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .2s;position:relative;}
+.tool-btn:hover{background:rgba(var(--accent-rgb),.3);border-color:var(--accent);}
+.tool-btn .tb-label{font-size:11px;}
+@media(max-width:820px){.tool-btn .tb-label{display:none;}.topbar-tagline{display:none;}}
+.dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-lg);padding:10px;display:none;z-index:400;min-width:190px;}
+.dropdown.open{display:block;}
+.dropdown-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--ink-soft);padding:4px 8px 8px;}
+.theme-row{display:flex;align-items:center;gap:10px;width:100%;padding:8px;border:none;background:none;border-radius:8px;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink);text-align:left;}
+.theme-row:hover{background:rgba(var(--accent-rgb),.08);}
+.theme-row.selected{background:rgba(var(--accent-rgb),.12);}
+.theme-swatch{width:18px;height:18px;border-radius:6px;flex-shrink:0;}
+.theme-row .check-mark{margin-left:auto;color:var(--accent);font-weight:800;}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#062a3a 100%);padding:48px 32px 40px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%,rgba(var(--accent-rgb),.14) 0%,transparent 60%);}
+.hero-emoji{font-size:64px;line-height:1;margin-bottom:12px;display:block;position:relative;}
+.hero-title{font-family:'Sora',sans-serif;font-size:32px;font-weight:800;color:#fff;margin-bottom:6px;position:relative;}
+.hero-subtitle{font-size:15px;color:rgba(255,255,255,.65);margin-bottom:20px;position:relative;}
+.hero-badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;position:relative;}
+.hero-badge{background:rgba(var(--accent-rgb),.15);border:1px solid rgba(var(--accent-rgb),.35);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:5px;cursor:pointer;transition:background .2s,transform .15s;user-select:none;}
+.hero-badge:hover{background:rgba(var(--accent-rgb),.28);transform:translateY(-1px);}
+.progress-section{background:var(--surface);border-bottom:1px solid var(--line);padding:0 32px;height:46px;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:290;box-shadow:0 2px 8px rgba(13,27,42,.06);}
+.progress-label{font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+.progress-track{flex:1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-radius:4px;width:0%;transition:width .4s ease;}
+.progress-count{font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;}
+.celebrate{display:none;background:linear-gradient(135deg,rgba(var(--accent-rgb),.15),rgba(var(--accent-rgb),.05));border-bottom:1px solid rgba(var(--accent-rgb),.3);padding:14px 32px;text-align:center;font-weight:700;color:var(--accent-dark);font-size:15px;font-family:'Sora',sans-serif;}
+.celebrate.show{display:block;}
+.search-wrap{padding:20px 20px 0;max-width:860px;margin:0 auto;}
+.search-box{width:100%;padding:10px 16px 10px 40px;border:1px solid var(--line);border-radius:8px;background:var(--surface);font-size:14px;font-family:'Inter',sans-serif;color:var(--ink);outline:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B7A8D' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:12px center;transition:border-color .2s;}
+.search-box:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1);}
+.search-no-results{text-align:center;padding:40px;color:var(--ink-soft);font-size:14px;display:none;}
+.zone-tabs{background:var(--surface);border-bottom:2px solid var(--line);display:flex;overflow-x:auto;padding:0 24px;gap:4px;scrollbar-width:none;position:sticky;top:46px;z-index:200;}
+.zone-tabs::-webkit-scrollbar{display:none;}
+.zone-tab{display:flex;align-items:center;gap:7px;padding:14px 18px;border:none;background:none;cursor:pointer;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--ink-soft);white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;margin-bottom:-2px;}
+.zone-tab:hover{color:var(--accent);background:rgba(var(--accent-rgb),.05);}
+.zone-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.zone-tab-count{background:var(--surface-2);border-radius:10px;padding:1px 7px;font-size:11px;font-weight:700;color:var(--ink-soft);}
+.zone-tab.active .zone-tab-count{background:rgba(var(--accent-rgb),.15);color:var(--accent);}
+.main{max-width:860px;margin:0 auto;padding:28px 20px 60px;}
+.stats-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+.stat-pill{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;user-select:none;}
+.stat-pill:hover{border-color:var(--accent);}
+.stat-pill.filter-on{border-color:var(--accent);background:rgba(var(--accent-rgb),.08);box-shadow:0 0 0 2px rgba(var(--accent-rgb),.15);}
+.stat-dot{width:8px;height:8px;border-radius:50%;}
+.stat-dot.critical{background:var(--critical);}.stat-dot.high{background:var(--high);}.stat-dot.medium{background:var(--medium);}.stat-dot.low{background:var(--low);}
+.stat-count{font-size:15px;font-weight:700;}
+.risk-legend{display:flex;gap:12px;flex-wrap:wrap;margin-left:auto;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--ink-soft);}
+.legend-dot{width:8px;height:8px;border-radius:3px;}
+.zone-panel{display:none;}
+.zone-panel.active{display:block;}
+.zone-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:20px 24px;background:var(--surface);border-radius:var(--radius);border:1px solid rgba(var(--accent-rgb),.2);box-shadow:var(--shadow);}
+.zone-icon{width:52px;height:52px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.12),rgba(var(--accent-rgb),.06));border:2px solid rgba(var(--accent-rgb),.25);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;}
+.zone-header-text h2{font-family:'Sora',sans-serif;font-size:20px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+.zone-header-text p{font-size:13px;color:var(--ink-soft);}
+.checks-list{display:flex;flex-direction:column;gap:10px;}
+.check-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s;}
+.check-card:hover{box-shadow:var(--shadow-lg);}
+.check-card.completed{border-color:rgba(var(--accent-rgb),.3);background:rgba(var(--accent-rgb),.03);}
+.check-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;}
+.check-checkbox{width:22px;height:22px;min-width:22px;border:2px solid var(--surface-2);border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:13px;background:var(--surface);}
+.check-card.completed .check-checkbox{background:var(--accent);border-color:var(--accent);color:#fff;}
+.check-num{font-size:10px;font-weight:700;color:var(--ink-soft);min-width:30px;font-family:'Sora',sans-serif;}
+.check-risk{font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+.risk-critical{background:var(--critical-bg);color:var(--critical);}
+.risk-high{background:var(--high-bg);color:var(--high);}
+.risk-medium{background:var(--medium-bg);color:var(--medium);}
+.risk-low{background:var(--low-bg);color:var(--low);}
+.check-title{flex:1;font-size:14px;font-weight:600;color:var(--ink);line-height:1.4;}
+.check-card.completed .check-title{color:var(--ink-soft);text-decoration:line-through;}
+.check-chevron{font-size:12px;color:var(--ink-soft);transition:transform .25s;min-width:16px;}
+.check-card.open .check-chevron{transform:rotate(180deg);}
+.check-detail{display:none;padding:0 18px 18px 18px;border-top:1px solid var(--line);}
+.check-card.open .check-detail{display:block;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:600px){.detail-grid{grid-template-columns:1fr;}}
+.detail-item{background:var(--tile);border-radius:8px;padding:11px 13px;}
+.detail-item.full{grid-column:1/-1;}
+.detail-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--accent-dark);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+body[data-mode="dark"] .detail-label{color:var(--accent);}
+.detail-value{font-size:13px;color:var(--ink);line-height:1.55;}
+.tip-box{margin-top:12px;background:linear-gradient(135deg,rgba(var(--accent-rgb),.08),rgba(var(--accent-rgb),.04));border:1px solid rgba(var(--accent-rgb),.25);border-left:4px solid var(--accent);border-radius:8px;padding:11px 14px;display:flex;gap:10px;align-items:flex-start;}
+.tip-icon{font-size:16px;line-height:1;margin-top:1px;}
+.tip-text{font-size:13px;color:var(--ink);line-height:1.55;}
+.tip-text strong{color:var(--accent-dark);font-weight:700;}
+body[data-mode="dark"] .tip-text strong{color:var(--accent);}
+.measurement-box{margin-top:10px;background:rgba(var(--accent-rgb),.05);border:1px solid var(--line);border-radius:8px;padding:10px 13px;font-size:12px;color:var(--ink-mid);line-height:1.5;font-family:'Sora',sans-serif;}
+.measurement-box strong{color:var(--ink);font-size:11px;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:3px;}
+.zone-actions{display:flex;justify-content:flex-end;gap:10px;margin:14px 0 18px;flex-wrap:wrap;}
+.btn{padding:9px 18px;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;}
+.btn-outline{background:var(--surface);border:1px solid var(--line);color:var(--ink-mid);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;box-shadow:0 2px 8px rgba(var(--accent-rgb),.3);}
+.btn-primary:hover{box-shadow:0 4px 16px rgba(var(--accent-rgb),.4);transform:translateY(-1px);}
+.modal-overlay{position:fixed;inset:0;background:rgba(13,27,42,.6);z-index:500;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border-radius:16px;max-width:640px;width:100%;box-shadow:var(--shadow-lg);border-top:4px solid var(--accent);}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--line);}
+.modal-head h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.modal-close{background:none;border:none;font-size:22px;color:var(--ink-soft);cursor:pointer;line-height:1;padding:4px;}
+.modal-close:hover{color:var(--accent);}
+.modal-body{padding:20px 24px 26px;color:var(--ink-mid);font-size:13.5px;}
+.modal-body h4{font-family:'Sora',sans-serif;font-size:14px;color:var(--ink);margin:16px 0 6px;display:flex;align-items:center;gap:6px;}
+.modal-body h4:first-child{margin-top:0;}
+.modal-body p{margin-bottom:8px;}
+.modal-body table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0;}
+.modal-body th{text-align:left;padding:7px 10px;background:rgba(var(--accent-rgb),.1);color:var(--ink);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+.modal-body td{padding:7px 10px;border-bottom:1px solid var(--line);color:var(--ink-mid);}
+.modal-body td strong{color:var(--ink);}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:0 24px 22px;flex-wrap:wrap;}
+.rule-list{list-style:none;margin:6px 0;}
+.rule-list li{padding:6px 0 6px 26px;position:relative;border-bottom:1px dashed var(--line);}
+.rule-list li::before{content:'✓';position:absolute;left:2px;color:var(--accent);font-weight:800;}
+.collection{max-width:860px;margin:0 auto;padding:10px 20px 50px;}
+.collection h3{font-family:'Sora',sans-serif;font-size:18px;color:var(--ink);margin-bottom:4px;}
+.collection>p{font-size:13px;color:var(--ink-soft);margin-bottom:16px;}
+.collection-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;}
+.module-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px;transition:all .2s;}
+.module-card:hover{border-color:var(--accent);box-shadow:var(--shadow);}
+.module-card .m-emoji{font-size:26px;}
+.module-card .m-name{font-family:'Sora',sans-serif;font-weight:700;font-size:13.5px;color:var(--ink);}
+.module-card .m-age{font-size:11.5px;color:var(--ink-soft);}
+.module-tag{margin-top:6px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;border-radius:6px;padding:3px 8px;align-self:flex-start;}
+.module-tag.owned{background:rgba(var(--accent-rgb),.15);color:var(--accent-dark);}
+body[data-mode="dark"] .module-tag.owned{color:var(--accent);}
+.module-tag.addon{background:var(--surface-2);color:var(--ink-soft);}
+.module-tag.coming{background:transparent;color:var(--ink-soft);border:1px dashed var(--line);}
+.footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:12px;line-height:1.8;}
+.footer strong{color:rgba(255,255,255,.8);}
+.zic svg{width:16px;height:16px;vertical-align:-3px;}
+.zone-tab .zic svg{color:inherit;}
+.topbar-logo svg{width:22px;height:22px;color:#fff;}
+.hero-emoji svg{width:72px;height:72px;color:var(--accent);filter:drop-shadow(0 4px 14px rgba(var(--accent-rgb),.45));}
+.zone-icon svg{width:27px;height:27px;color:var(--accent-dark);}
+body[data-mode="dark"] .zone-icon svg{color:var(--accent);}
+.module-card .m-emoji svg{width:30px;height:30px;color:var(--accent-dark);}
+body[data-mode="dark"] .module-card .m-emoji svg{color:var(--accent);}
+html{scroll-behavior:smooth;}
+.float-nav{position:fixed;right:16px;bottom:20px;display:flex;flex-direction:column;gap:8px;z-index:250;}
+html[dir="rtl"] .float-nav{right:auto;left:16px;}
+.float-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent-dark);font-size:18px;font-weight:800;cursor:pointer;box-shadow:var(--shadow-lg);transition:all .2s;}
+.float-btn:hover{background:var(--accent);color:#fff;border-color:var(--accent);transform:translateY(-2px);}
+body[data-mode="dark"] .float-btn{color:var(--accent);}
+.zone-disclaimer{margin-top:18px;padding:10px 14px;border:1px dashed var(--line);border-radius:8px;font-size:11.5px;color:var(--ink-soft);text-align:center;}
+.print-disclaimer{display:none;}
+#cheat-print{display:none;}
+@media print{
+  body{background:#fff !important;color:#000;font-size:11px;margin:0 !important;padding:0 !important;}
+  .topbar,.hero,.search-wrap,.zone-tabs,.progress-section,.zone-actions,.stats-bar,.collection,.modal-overlay,.celebrate,.dropdown{display:none !important;}
+  .main{max-width:100%;padding:0 0 30px;}
+  .check-card{box-shadow:none;border:1px solid #ccc;page-break-inside:avoid;margin-bottom:6px;}
+  .check-detail{display:block !important;border-top:1px solid #ddd;}
+  .check-chevron{display:none;}
+  .zone-panel{display:block !important;page-break-before:auto;}
+  .zone-header{box-shadow:none;border:1px solid #ccc;margin-top:14px;}
+  body.print-zone .zone-panel{display:none !important;}
+  body.print-zone .zone-panel.active{display:block !important;}
+  body.print-cheat .main,body.print-cheat .footer,body.print-cheat .zone-panel,body.print-cheat .print-disclaimer{display:none !important;}
+  body.print-cheat #cheat-print{display:block !important;}
+  #cheat-print{margin:0;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cp-card{border:2.5px solid #0D1B2A;border-radius:16px;overflow:hidden;font-family:'Inter',sans-serif;color:#0D1B2A;height:272mm;display:flex;flex-direction:column;page-break-inside:avoid;page-break-after:avoid;}
+  .cp-head{background:#0D1B2A !important;color:#fff;display:flex;align-items:center;gap:12px;padding:13px 22px;}
+  .cp-head svg{width:38px;height:38px;color:var(--accent);}
+  .cp-title{font-family:'Sora',sans-serif;font-size:20px;font-weight:800;line-height:1.2;}
+  .cp-title em{color:var(--accent);font-style:normal;}
+  .cp-sub{font-size:11.5px;color:rgba(255,255,255,.78);margin-top:2px;}
+  .cp-tag{margin-left:auto;font-size:10px;font-style:italic;color:rgba(255,255,255,.65);text-align:right;}
+  .cp-contacts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:11px 22px;background:rgba(var(--accent-rgb),.09) !important;}
+  .cp-chip{border:1.2px solid rgba(var(--accent-rgb),.55);border-radius:8px;padding:5px 9px;background:#fff !important;}
+  .cp-chip b{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;color:var(--accent-dark);}
+  .cp-chip span{font-size:12px;font-weight:700;}
+  .cp-cols{display:flex;gap:20px;padding:13px 22px 6px;flex:1;min-height:0;overflow:hidden;}
+  .cp-cols h3{font-family:'Sora',sans-serif;font-size:13px;border-bottom:2px solid var(--accent);padding-bottom:3px;margin:0 0 8px;}
+  .cp-rules{flex:1.15;}
+  .cp-rules ul{list-style:none;margin:0;padding:0;}
+  .cp-rules li{font-size:11px;line-height:1.5;padding:4px 0 4px 18px;position:relative;border-bottom:1px dashed #ddd;}
+  .cp-rules li::before{content:'✓';position:absolute;left:0;color:var(--accent-dark);font-weight:800;}
+  html[dir="rtl"] .cp-rules li{padding:4px 18px 4px 0;}
+  html[dir="rtl"] .cp-rules li::before{left:auto;right:0;}
+  .cp-numsec{flex:1;}
+  .cp-numsec table{width:100%;border-collapse:collapse;font-size:10.5px;}
+  .cp-numsec td{border-bottom:1px solid #eee;padding:4px 5px;vertical-align:top;}
+  .cp-numsec td strong{color:#0D1B2A;}
+  .cp-notes{margin:6px 22px 10px;border:1.5px dashed var(--accent);border-radius:10px;padding:8px 13px;font-size:11px;white-space:pre-wrap;max-height:34mm;overflow:hidden;}
+  .cp-notes b{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--accent-dark);display:block;margin-bottom:2px;}
+  .cp-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#0D1B2A !important;color:rgba(255,255,255,.85);padding:9px 22px;font-size:10px;line-height:1.55;margin-top:auto;}
+  .cp-foot b{color:var(--accent);}
+  .cp-qr{display:flex;align-items:center;gap:10px;text-align:right;}
+  .cp-qr img{width:68px;height:68px;background:#fff;border-radius:8px;padding:3px;}
+  .cp-qr .qr-ph{width:68px;height:68px;border:1.5px dashed rgba(255,255,255,.5);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:8.5px;text-align:center;color:rgba(255,255,255,.6);padding:4px;}
+  .footer{background:#fff;color:#555;}
+  .footer strong{color:#000;}
+  .float-nav{display:none !important;}
+  .print-disclaimer{display:block !important;position:fixed;bottom:0;left:0;right:0;text-align:center;font-size:8.5px;color:#666;border-top:1px solid #ccc;padding:3px 0;background:#fff;}
+  @page{size:A4;margin:10mm 10mm 12mm;}
+}
+</style>
+</head>
+<body data-theme="sky" data-mode="light">
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo" id="logo-icon">S</div>
+    <div>
+      <div class="topbar-name">Safe<span>Life</span></div>
+      <div class="topbar-tagline">To all moms by a mom · NEBOSH &amp; OSHA Professional</div>
+    </div>
+  </div>
+  <div class="topbar-meta">
+    <div class="toolbar">
+      <button class="tool-btn" id="btn-search" title="Search all checks">🔍</button>
+      <button class="tool-btn" id="btn-manual" title="User Manual">📖<span class="tb-label" data-i18n="manual">Manual</span></button>
+      <button class="tool-btn" id="btn-cheat" title="Emergency Cheat Sheet">🚨<span class="tb-label" data-i18n="cheat">Cheat Sheet</span></button>
+      <button class="tool-btn" id="btn-print" title="Print / Save as PDF">🖨️<span class="tb-label" data-i18n="printPdf">Print / PDF</span></button>
+      <button class="tool-btn" id="btn-save" title="Save progress to file">💾<span class="tb-label" data-i18n="save">Save</span></button>
+      <button class="tool-btn" id="btn-load" title="Load saved progress">📂<span class="tb-label" data-i18n="load">Load</span></button>
+      <button class="tool-btn" id="btn-lang" title="Language" style="display:none">🌐<span class="tb-label" id="lang-label">EN</span>
+        <div class="dropdown" id="dd-lang"></div>
+      </button>
+      <button class="tool-btn" id="btn-theme" title="Colour theme">🎨<span class="tb-label" data-i18n="theme">Theme</span>
+        <div class="dropdown" id="dd-theme"></div>
+      </button>
+      <button class="tool-btn" id="btn-mode" title="Light / dark mode">🌙</button>
+    </div>
+    <div class="progress-pill"><span id="topbar-done">0</span>&nbsp;/ 84 <span data-i18n="checksDone" style="color:inherit;font-size:12px;">checks done</span></div>
+  </div>
+</header>
+
+<div class="hero">
+  <span class="hero-emoji" id="hero-icon">👶</span>
+  <div class="hero-title" data-i18n="heroTitle">Newborn Safety — The First 28 Days</div>
+  <div class="hero-subtitle" data-i18n="heroSub">84 evidence-based safety checks across 6 zones · The newborn period is short, intense, and unlike any other stage of life</div>
+  <div class="hero-badges">
+    <div class="hero-badge" data-zone="1"><span class="zic" data-zi="z1"></span> <span data-i18n="bz1">Sleep &amp; Nursery</span></div>
+    <div class="hero-badge" data-zone="2"><span class="zic" data-zi="z2"></span> <span data-i18n="bz2">Feeding &amp; Digestion</span></div>
+    <div class="hero-badge" data-zone="3"><span class="zic" data-zi="z3"></span> <span data-i18n="bz3">Bathing &amp; Cord Care</span></div>
+    <div class="hero-badge" data-zone="4"><span class="zic" data-zi="z4"></span> <span data-i18n="bz4">Health &amp; Screening</span></div>
+    <div class="hero-badge" data-zone="5"><span class="zic" data-zi="z5"></span> <span data-i18n="bz5">Outings &amp; Travel</span></div>
+    <div class="hero-badge" data-zone="6"><span class="zic" data-zi="z6"></span> <span data-i18n="bz6">Home &amp; Caregivers</span></div>
+  </div>
+</div>
+
+<div class="progress-section">
+  <div class="progress-label" data-i18n="overallProgress">Overall Progress</div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <div class="progress-count" id="progress-count">0 of 84</div>
+</div>
+<div class="celebrate" id="celebrate">🎉 <span data-i18n="celebrate">All 84 checks complete — your home is SafeLife certified! Print your checklist as a keepsake.</span></div>
+
+<div class="search-wrap">
+  <input class="search-box" type="text" id="search-input" placeholder="Search checks… e.g. cord stump, jaundice, swaddle, car seat, latch…">
+</div>
+
+<div class="zone-tabs" id="zone-tabs">
+  <button class="zone-tab active" data-zone="1"><span class="zic" data-zi="z1"></span> <span data-i18n="z1">Newborn Sleep &amp; Nursery</span> <span class="zone-tab-count" id="ztc-1">0/14</span></button>
+  <button class="zone-tab" data-zone="2"><span class="zic" data-zi="z2"></span> <span data-i18n="z2">Feeding, Weight &amp; Digestion</span> <span class="zone-tab-count" id="ztc-2">0/14</span></button>
+  <button class="zone-tab" data-zone="3"><span class="zic" data-zi="z3"></span> <span data-i18n="z3">Bathing, Cord Care &amp; Skin</span> <span class="zone-tab-count" id="ztc-3">0/14</span></button>
+  <button class="zone-tab" data-zone="4"><span class="zic" data-zi="z4"></span> <span data-i18n="z4">Health Monitoring &amp; Screening</span> <span class="zone-tab-count" id="ztc-4">0/14</span></button>
+  <button class="zone-tab" data-zone="5"><span class="zic" data-zi="z5"></span> <span data-i18n="z5">Transport, Outings &amp; Equipment</span> <span class="zone-tab-count" id="ztc-5">0/14</span></button>
+  <button class="zone-tab" data-zone="6"><span class="zic" data-zi="z6"></span> <span data-i18n="z6">Household, Visitors &amp; Caregivers</span> <span class="zone-tab-count" id="ztc-6">0/14</span></button>
+</div>
+
+<div class="main" id="main-content">
+  <div class="stats-bar" id="stats-bar">
+    <div class="stat-pill" data-risk="critical"><span class="stat-dot critical"></span><span class="stat-count" id="s-critical">0</span> <span data-i18n="critical">Critical</span></div>
+    <div class="stat-pill" data-risk="high"><span class="stat-dot high"></span><span class="stat-count" id="s-high">0</span> <span data-i18n="high">High</span></div>
+    <div class="stat-pill" data-risk="medium"><span class="stat-dot medium"></span><span class="stat-count" id="s-medium">0</span> <span data-i18n="medium">Medium</span></div>
+    <div class="stat-pill" data-risk="low"><span class="stat-dot low"></span><span class="stat-count" id="s-low">0</span> <span data-i18n="low">Low</span></div>
+    <div class="risk-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--critical)"></div><span data-i18n="legendCritical">Critical = immediate action</span></div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--high)"></div><span data-i18n="legendHigh">High = urgent attention</span></div>
+    </div>
+  </div>
+  <div id="search-no-results" class="search-no-results"><span data-i18n="noResults">No checks match your search. Try different keywords.</span><br><span data-i18n="notCovered" style="font-size:12.5px;"></span></div>
+</div>
+
+<div class="collection">
+  <h3 data-i18n="collTitle">The SafeLife Collection</h3>
+  <p data-i18n="collSub">One safety system for every stage of life. Add more modules any time — each works exactly like this one.</p>
+  <div class="collection-grid" id="collection-grid"></div>
+</div>
+
+<!-- SITUATION MODULES -->
+<div class="collection" style="padding-top:0;">
+  <h3>Situation Modules</h3>
+  <p>Real-life situations and conditions — each its own complete, standalone 84-check system. Available separately as they launch.</p>
+  <div class="collection-grid" id="situation-grid"></div>
+</div>
+
+<footer class="footer">
+  <strong>SafeLife</strong> · Newborn Module (0–28 Days) · PRO Edition<br>
+  Created by a NEBOSH &amp; OSHA trained HSE professional · "To all moms by a mom"<br>
+  Evidence base: WHO · NICE clinical guidance · UN R129 · BS EN safety standards · ILCOR-aligned safe sleep guidance · international newborn-care research<br>
+  <span style="color:rgba(255,255,255,.35);" data-i18n="disclaimer">This checklist is educational and does not replace professional medical advice. Always consult your health visitor, paediatrician, or doctor.</span>
+</footer>
+
+<div class="modal-overlay" id="modal-manual">
+  <div class="modal">
+    <div class="modal-head"><h3>📖 <span data-i18n="manualTitle">User Manual</span></h3><button class="modal-close" data-close="modal-manual">✕</button></div>
+    <div class="modal-body" id="manual-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cheat">
+  <div class="modal">
+    <div class="modal-head"><h3>🚨 <span data-i18n="cheatTitle">Emergency Cheat Sheet</span></h3><button class="modal-close" data-close="modal-cheat">✕</button></div>
+    <div class="modal-body" id="cheat-body"></div>
+    <div class="modal-actions"><button class="btn btn-outline" id="btn-seller" title="Seller: set this product's QR code" style="margin-right:auto;">⚙</button><button class="btn btn-primary" id="btn-print-cheat" data-i18n="printCheat">🖨️ Print cheat sheet</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-seller">
+  <div class="modal">
+    <div class="modal-head"><h3>⚙ Seller Settings</h3><button class="modal-close" data-close="modal-seller">✕</button></div>
+    <div class="modal-body" id="seller-body"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-print">
+  <div class="modal">
+    <div class="modal-head"><h3>🖨️ <span data-i18n="printTitle">Print or Save as PDF</span></h3><button class="modal-close" data-close="modal-print">✕</button></div>
+    <div class="modal-body">
+      <p data-i18n="printHint">Choose what to print. To save as a PDF instead of printing on paper, choose "Save as PDF" as the printer in the print dialog.</p>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-top:6px;" data-i18n="printNote">All checks are automatically expanded to full detail when printing — no need to open them first.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="print-zone" data-i18n="printZone">Current zone only</button>
+      <button class="btn btn-outline" id="print-cheat2" data-i18n="printCheat2">Cheat sheet</button>
+      <button class="btn btn-primary" id="print-all" data-i18n="printAll">Full checklist (all 84)</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="load-file" accept=".json" style="display:none">
+
+<div class="float-nav">
+  <button class="float-btn" id="fn-top" title="Back to top">⤒</button>
+  <button class="float-btn" id="fn-prev" title="Previous check">↑</button>
+  <button class="float-btn" id="fn-next" title="Next check">↓</button>
+</div>
+
+<div class="print-disclaimer" data-i18n="disclaimer">This checklist is educational and does not replace professional medical advice. Always consult your health visitor, paediatrician, or doctor.</div>
+
+<div id="cheat-print"></div>
+
+<script>
+const BRAND_NAME = 'The Snag Tag';
+const STORE_URL  = '';
+const QR_IMAGE   = '';
+
+const I18N = {
+en:{name:'English',manual:'Manual',cheat:'Cheat Sheet',printPdf:'Print / PDF',save:'Save',load:'Load',theme:'Theme',checksDone:'checks done',heroTitle:'Newborn Safety — The First 28 Days',heroSub:'84 evidence-based safety checks across 6 zones · The newborn period is short, intense, and unlike any other stage of life',bz1:'Sleep & Nursery',bz2:'Feeding & Digestion',bz3:'Bathing & Cord Care',bz4:'Health & Screening',bz5:'Outings & Travel',bz6:'Home & Caregivers',overallProgress:'Overall Progress',ofWord:'of',z1:'Newborn Sleep & Nursery',z2:'Feeding, Weight & Digestion',z3:'Bathing, Cord Care & Skin',z4:'Health Monitoring & Screening',z5:'Transport, Outings & Equipment',z6:'Household, Visitors & Caregivers',zd1:'14 checks: back-to-sleep every time, room-sharing without bed-sharing, firm flat surfaces, swaddle and hip safety, and temperature control for a baby who cannot yet shiver.',zd2:'14 checks: feeding frequency and hunger cues, weight-loss thresholds, latch and positioning, reflux and burping, and safe formula or expressed-milk preparation.',zd3:'14 checks: umbilical cord stump care, first bathing technique, jaundice recognition, and gentle newborn skin and nail care.',zd4:'14 checks: normal newborn temperature and breathing, fever as an emergency, screening-test follow-ups, and the early signs of serious illness.',zd5:'14 checks: the first car-seat ride home, pram and babywearing safety, temperature layering outdoors, and safe first outings.',zd6:'14 checks: visitor infection control, safe handling and handover, shaken-baby awareness, and caregiver wellbeing in the exhausting first weeks.',critical:'Critical',high:'High',medium:'Medium',low:'Low',legendCritical:'Critical = immediate action',legendHigh:'High = urgent attention',noResults:'No checks match your search. Try different keywords.',searchPh:'Search checks… e.g. cord stump, jaundice, swaddle, car seat, latch…',who:'Who',what:'What',where:'Where',why:'Why',how:'How',standards:'Standards & Measurements',example:'Real-World Example',quickTip:'Quick Win',markAll:'Mark All Complete',unmarkAll:'Unmark All',expandAll:'Expand All',collapseAll:'Collapse All',celebrate:'All 84 checks complete — your home is SafeLife certified! Print your checklist as a keepsake.',collTitle:'The SafeLife Collection',collSub:'One safety system for every stage of life. Every module below is a complete, standalone 84-check system — available separately, or as the full 12-module bundle.',owned:'✓ Current Module',addon:'Available Separately',disclaimer:'This checklist is educational and does not replace professional medical advice. Always consult your doctor or health professional.',manualTitle:'User Manual',cheatTitle:'Emergency Cheat Sheet',printTitle:'Print or Save as PDF',printHint:'Choose what to print. To save as a PDF instead of printing on paper, choose "Save as PDF" as the printer in the print dialog.',printZone:'Current zone only',printCheat2:'Cheat sheet',printAll:'Full checklist (all 84)',printCheat:'🖨️ Print cheat sheet',langNote:'Safety check content is written in English (verified international guidance). Interface labels switch language.',saved:'Progress saved',loaded:'Progress loaded',cheatContacts:'My emergency contacts',cheatHint:'Make it yours: edit any name or number, add or delete rows. Everything saves automatically on this device and prints on your cheat sheet.',addContact:'+ Add contact',myNotes:'My notes',notesPh:'Allergies, medication, door codes for babysitters, your address for emergency calls…',rules:'The 10 golden rules',keyNums:'Key measurements at a glance',delRow:'Remove',notCovered:'Topic not covered in this module? Check the cheat sheet, ask your health professional, or request it via your SafeLife store page — new checks arrive in free updates.',printNote:'All checks are automatically expanded to full detail when printing — no need to open them first.',mn1:'Newborn',mn2:'Infant',mn3:'Toddler',mn4:'Preschooler',mn5:'School-Age',mn6:'Teenager',mn7:'Young Adult',mn8:'Adult',mn9:'Middle-Aged Adult',mn10:'Active Seniors',mn11:'Advanced Age',mn12:'90+ and Longevity',
+manualBody:'<h4>🚀 Getting started</h4><p>84 checks in 6 zones. Tap any check to see Who / What / Where / Why / How, exact measurements and standards, a real-world example and a quick-win tip.</p><h4>✅ Progress</h4><p>Tick the box to complete a check — bars and counters update instantly. Each zone has Mark All / Unmark All and Expand / Collapse All buttons, and the floating ↑ ↓ arrows jump between checks.</p><h4>🔍 Search &amp; filters</h4><p>The search box filters all 84 checks live across every zone. Tap a risk pill (Critical / High / Medium / Low) to filter by risk level; tap again to clear.</p><h4>🎨 Personalise</h4><p>Pick a colour theme and light or dark mode — remembered on this device. Make the cheat sheet yours: add your own emergency numbers and notes.</p><h4>💾 Save &amp; 🖨️ Print</h4><p>Progress saves automatically on this device as you go. To move your progress to another device or keep a backup, tap 💾 Save — this downloads a small file. On the new device (or after clearing your browser), open the same checklist, tap 📂 Load, and choose that file to restore your progress exactly where you left off. Keep the file somewhere safe, like your email or a notes app. Print the full checklist, one zone, or your personalised cheat sheet — all checks expand automatically when printing. Choose "Save as PDF" in the print dialog to create a PDF.</p>'}
+};
+
+const _svg = inner => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">' + inner + '</svg>';
+const ICONS = {
+  stage: _svg('<circle cx="12" cy="13" r="6.5"/><path d="M12 6.5c0-1.8.8-2.7 2.3-3"/><circle cx="5.1" cy="13" r="1.3"/><circle cx="18.9" cy="13" r="1.3"/><circle cx="9.7" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><circle cx="14.3" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><path d="M9.9 15c1.4 1.2 2.8 1.2 4.2 0"/>'),
+  z1: _svg('<path d="M17.6 3.4a4.4 4.4 0 1 0 2.9 7 5.4 5.4 0 0 1-2.9-7z"/><path d="M3 14.2h18"/><path d="M4.6 14.2v6.3M9.2 14.2v6.3M13.8 14.2v6.3M18.4 14.2v6.3"/>'),
+  z2: _svg('<path d="M11 4.4a1.5 1.5 0 0 1 2 0v1.1h-2z"/><path d="M10 5.5h4l.6 2h-5.2z"/><rect x="8.6" y="7.5" width="6.8" height="12.6" rx="2.2"/><path d="M8.6 11.5h2.4M8.6 14.6h2.4"/>'),
+  z3: _svg('<path d="M4 13h16v1.4a4.6 4.6 0 0 1-4.6 4.6H8.6A4.6 4.6 0 0 1 4 14.4z"/><path d="M6 13V7.2A2.2 2.2 0 0 1 8.2 5h1.3"/><circle cx="14" cy="6" r="1.4"/><circle cx="17.1" cy="8.2" r="1"/><circle cx="15.3" cy="10.3" r="0.7"/><path d="M7 19l-.8 1.7M17 19l.8 1.7"/>'),
+  z4: _svg('<path d="M12 20C6.2 15.7 3.6 12.4 3.6 9.1a4.4 4.4 0 0 1 8.4-1.9 4.4 4.4 0 0 1 8.4 1.9c0 3.3-2.6 6.6-8.4 10.9z"/>'),
+  z5: _svg('<path d="M4.5 16v-2.6l1.8-3.8a2 2 0 0 1 1.8-1.2h7.8a2 2 0 0 1 1.8 1.2l1.8 3.8V16"/><circle cx="7.8" cy="16.9" r="1.7"/><circle cx="16.2" cy="16.9" r="1.7"/><path d="M9.5 16.9h5M6.6 12.6h10.8"/>'),
+  z6: _svg('<path d="M4 11l8-7 8 7"/><path d="M6 9.8V20h12V9.8"/><path d="M10 20v-5.5h4V20"/>'),
+  stages: [
+    _svg('<circle cx="12" cy="13" r="6.5"/><path d="M12 6.5c0-1.8.8-2.7 2.3-3"/><circle cx="9.7" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><circle cx="14.3" cy="12.2" r="0.65" fill="currentColor" stroke="none"/><path d="M9.9 15c1.4 1.2 2.8 1.2 4.2 0"/>'),
+    _svg('<circle cx="12" cy="7" r="3.2"/><path d="M6.8 20.5v-3.2a5.2 5.2 0 0 1 10.4 0v3.2"/>'),
+    _svg('<path d="M12 3.5l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8z"/>'),
+    _svg('<rect x="6.5" y="8" width="11" height="12" rx="3"/><path d="M9.5 8V6.2a2.5 2.5 0 0 1 5 0V8"/><rect x="9.7" y="13" width="4.6" height="4" rx="1"/><path d="M6.5 11.5h11"/>'),
+    _svg('<path d="M5 15v-1.5a7 7 0 0 1 14 0V15"/><rect x="4" y="14" width="3.4" height="6" rx="1.6"/><rect x="16.6" y="14" width="3.4" height="6" rx="1.6"/>'),
+    _svg('<path d="M12 4.5L2.8 9l9.2 4.5L21.2 9z"/><path d="M6.8 11.5v3.8c0 1.6 10.4 1.6 10.4 0v-3.8"/><path d="M21.2 9v5"/>'),
+    _svg('<rect x="3.8" y="8" width="16.4" height="11.2" rx="2"/><path d="M9.5 8V6.6A1.6 1.6 0 0 1 11.1 5h1.8a1.6 1.6 0 0 1 1.6 1.6V8M3.8 12.8h16.4"/>'),
+    _svg('<path d="M8.5 9.5v-4c2.3 1.8 4.7 1.8 7 0v4a3.5 3.5 0 0 1-7 0z"/><path d="M12 13v8M12 18c-1.8-.4-3-1.4-3.6-3"/>')
+  ]
+};
+const MODULE_ICON_IX = [0,0,1,2,3,4,5,6,6,7,7,7];
+function injectIcons(){
+  document.getElementById('logo-icon').innerHTML = ICONS.stage;
+  document.getElementById('hero-icon').innerHTML = ICONS.stage;
+  document.querySelectorAll('.zic[data-zi]').forEach(el=>{ el.innerHTML = ICONS[el.dataset.zi] || ''; });
+}
+// ═══════════════════════════════════════════
+// ALL 84 CHECKS — NEWBORN (0–28 DAYS)
+// ═══════════════════════════════════════════
+const ZONES = [
+  {
+    id: 1, name: 'Newborn Sleep & Nursery Safety', icon: '🌙',
+    desc: '14 checks covering back-to-sleep, room-sharing, firm flat surfaces, swaddle and hip safety, and temperature control for a baby who cannot yet shiver.',
+    checks: [
+      { id:'newborn01', num:'N01', risk:'critical', title:'Back to Sleep, Every Single Sleep',
+        who:'Anyone settling a newborn for any sleep, day or night, in the first 28 days',
+        what:'Placing baby on their side or front to sleep, or leaving them where they might roll before they can do so themselves',
+        where:'Every sleep surface — crib, bassinet, moses basket, or pram',
+        why:'Sleeping on the back is the single most protective position against sudden infant death in the newborn period. International safe-sleep guidance aligned with WHO and resuscitation-council (ILCOR-aligned) consensus shows this position substantially lowers risk compared with front or side sleeping.',
+        how:'Lay baby on their back for every single sleep from birth, including naps. Gently reposition if they shift onto their side during handling. Tell every caregiver — grandparents, babysitters, partners — the same rule; older advice about side-sleeping is now considered unsafe.',
+        measurement:'Back position for 100% of sleeps in the first 28 days; any sleep surface tilted no more than about 10° if using an incline-approved bassinet.',
+        example:'A well-meaning relative puts a 9-day-old down on her side "so she won\'t choke if she brings something up" — this is now known to increase, not reduce, risk, and the parents gently correct it every visit.',
+        tip:'Say it out loud every time you lay baby down — "back to sleep" — the habit becomes automatic within days.' },
+
+      { id:'newborn02', num:'N02', risk:'critical', title:'Firm, Flat, Newborn-Rated Sleep Surface',
+        who:'Parents choosing a bassinet, moses basket, or crib for the first 28 days',
+        what:'Soft, padded, sagging, or second-hand sleep surfaces without a correctly fitted, firm mattress',
+        where:'Nursery, parents\' bedroom, or any room used for a newborn\'s sleep',
+        why:'A firm, flat, well-fitted mattress stops a newborn\'s face from sinking into soft bedding, which is a known suffocation risk in this age group.',
+        how:'Use a bassinet, moses basket, or crib meeting a recognised safety standard, with a mattress that is firm to the push-test and leaves no more than a finger-width gap at any edge. Fit only a tight bottom sheet — nothing else on the mattress.',
+        measurement:'Mattress gap ≤2 finger-widths (about 25mm/1in) at every edge; mattress passes a firm hand-push test with no deep sink.',
+        example:'A borrowed moses basket mattress has softened and compressed with age; the family replaces it with a new, correctly sized firm mattress before first use.',
+        tip:'If you can make a deep dent with your palm that doesn\'t spring back immediately, the mattress is too soft — replace it.' },
+
+      { id:'newborn03', num:'N03', risk:'critical', title:'Room-Sharing Without Bed-Sharing',
+        who:'All caregivers overnight with a newborn',
+        what:'Baby sleeping in a separate room too early, or sharing the same sleep surface — a bed, sofa, or armchair — with an adult',
+        where:'Parents\' bedroom overnight',
+        why:'Room-sharing on a separate firm surface for at least the first 6 months, and especially the first 28 days, is one of the most protective sleep arrangements known. Sharing a sleep surface raises risk further, especially on a sofa or armchair.',
+        how:'Place the crib, bassinet, or bedside co-sleeper in the parents\' room within arm\'s reach. If you bring baby into bed to feed, return them to their own firm surface before you sleep — never settle for sleep together on a sofa or armchair.',
+        measurement:'Room-sharing recommended for a minimum of 6 months, most critical in the first 28 days; sofa/chair co-sleeping is never safe.',
+        example:'A mother breastfeeding at 3am on the sofa feels herself drifting off with baby on her chest — she immediately calls a partner to take over so she can move to bed properly.',
+        tip:'Put the bassinet on the side of the bed you feed from most often — returning baby becomes a two-second reach, not a wide-awake walk down the hall.' },
+
+      { id:'newborn04', num:'N04', risk:'high', title:'Room Temperature for a Baby Who Can\'t Yet Shiver',
+        who:'All households with a newborn',
+        what:'A nursery that is too hot or too cold, or a newborn who is overdressed or underdressed for the room',
+        where:'The sleep room, day and night',
+        why:'Newborns cannot shiver to generate heat, and their sweating response is still immature, so environmental temperature control matters more in the first weeks than at any later stage.',
+        how:'Keep the room at 16–20°C (61–68°F) using a simple room thermometer. Dress baby in roughly one layer more than an adult would need to feel comfortable indoors. Avoid hats during sleep and skip duvets, pillows, or loose blankets.',
+        measurement:'Room temperature 16–20°C (61–68°F); check warmth at the nape of the neck, not the hands or feet.',
+        example:'A well-intentioned grandparent turns the heating up "for the baby" — the room reaches 24°C (75°F) and baby is found flushed and damp at the hairline; the family resets the thermostat and adds a room thermometer.',
+        tip:'A simple stick-on or digital room thermometer costs very little and removes all the guesswork.' },
+
+      { id:'newborn05', num:'N05', risk:'high', title:'Swaddle Safety & Hip-Healthy Positioning',
+        who:'Parents swaddling a newborn to settle the startle reflex',
+        what:'Swaddles wrapped too tightly over the hips and legs, or continued use once baby begins trying to roll',
+        where:'Wherever baby is swaddled for sleep or settling',
+        why:'Swaddling can calm the newborn startle (Moro) reflex, but wrapping the legs straight and tight raises the risk of hip dysplasia, and any arms-in swaddle becomes unsafe the moment a baby can attempt to roll.',
+        how:'Leave the hips and knees free to bend up and out into a natural "frog" position — never wrap the legs straight and tight. Use a certified hip-healthy swaddle product, and stop arms-in swaddling completely at the first sign of rolling attempts.',
+        measurement:'Hip room equal to roughly 2–3 finger-widths at the hip/knee fabric; look for a hip-healthy swaddle certification.',
+        example:'A newborn swaddled with legs held straight by a tight wrap is later found to need hip monitoring; the next sibling is swaddled hip-healthy from day one with no issues.',
+        tip:'If you can\'t comfortably slide two fingers under the fabric at the hips, loosen it.' },
+
+      { id:'newborn06', num:'N06', risk:'critical', title:'A Completely Smoke-Free Environment',
+        who:'Everyone in the household and any visitors',
+        what:'Smoking near baby, in the car, in rooms baby sleeps in, or simply not changing clothes after smoking before handling baby',
+        where:'The whole home, the car, and anywhere baby spends time',
+        why:'Smoke exposure meaningfully raises risk in the newborn sleep period, even from residual smoke on clothing or hair rather than direct exposure during sleep.',
+        how:'Keep the home and car completely smoke-free from day one. Anyone who has smoked should change their outer clothing and wash their hands before holding baby. This applies equally to both parents and to visitors.',
+        measurement:'Zero smoke exposure target, at home, in the car, and on clothing/hair before handling baby.',
+        example:'A visiting relative smokes on the porch before the visit "so it won\'t bother anyone" — the family still asks them to wash hands and cover up before holding the newborn.',
+        tip:'Keep a spare jumper by the door for anyone who has just smoked outside, so freshening up before a cuddle becomes automatic.' },
+
+      { id:'newborn07', num:'N07', risk:'medium', title:'Realistic Newborn Sleep Cycles',
+        who:'Parents managing overnight care',
+        what:'Misreading normal newborn wake frequency as a problem, which can lead to unsafe workarounds such as propped bottles or over-tired handling',
+        where:'Overnight and during naps',
+        why:'Newborns wake every 2–4 hours to feed for the first month, with short sleep cycles and lighter sleep than adults — this is normal biology, not a sign that anything is wrong.',
+        how:'Expect 8–12 short sleeps across 24 hours and feed on demand overnight rather than trying to stretch gaps. Keep the sleep environment consistently safe rather than attempting sleep training in the newborn period.',
+        measurement:'Typical waking every 2–4 hours; total sleep roughly 14–17 hours per 24 hours (WHO).',
+        example:'First-time parents worry their baby "should be sleeping through" by two weeks; a health visitor reassures them this is entirely normal for the newborn stage.',
+        tip:'Match your own rest to baby\'s cycle where you can — short naps in the day add up and protect your own safety and mood.' },
+
+      { id:'newborn08', num:'N08', risk:'high', title:'Safe Use of Second-Hand or Borrowed Sleep Equipment',
+        who:'Families using hand-me-down bassinets, moses baskets, or cribs',
+        what:'Older equipment missing current safety features, such as wider bar spacing or worn fittings',
+        where:'Wherever the sleep equipment is set up',
+        why:'Safety standards evolve; older cots and bassinets may not meet current bar-spacing or structural requirements, even if they look sound.',
+        how:'Check the age and condition of any borrowed frame, inspect for cracks or missing hardware, and always buy a new mattress even when reusing a frame. Check bar spacing and construction against a current recognised standard.',
+        measurement:'Cot bar spacing typically 45–65mm under recognised standards; always use a new, correctly fitted mattress.',
+        example:'A grandmother offers the cot she used decades ago; the family keeps the frame after checking it, but buys a brand-new mattress rather than reusing the old one.',
+        tip:'When in doubt about an older frame\'s safety, a new mattress is the one non-negotiable purchase — it is the surface baby actually lies on.' },
+
+      { id:'newborn09', num:'N09', risk:'medium', title:'A Clear Sleep Space — Nothing Loose',
+        who:'Caregivers setting up the crib or bassinet',
+        what:'Pillows, cot bumpers, soft toys, loose blankets, or positioners placed in the sleep space',
+        where:'Inside the crib, bassinet, or moses basket',
+        why:'A newborn cannot yet move their head away from an obstruction, so a completely clear sleep space removes suffocation and overheating risk at the source.',
+        how:'Keep the sleep space to mattress, fitted sheet, and baby — nothing else. Once out of the hospital swaddle, use a correctly sized baby sleep bag with fitted neck and armholes instead of loose blankets.',
+        measurement:'Sleep bag fitted at neck and arms with no hood; tog rating matched to the room temperature.',
+        example:'A well-meaning gift of a padded cot bumper and soft toys is admired, then stored away until baby is much older and the crib is no longer used for unsupervised sleep.',
+        tip:'If you\'re tempted to add something "for comfort," picture it from baby\'s eye level — most padding is for the adult\'s comfort, not the baby\'s safety.' },
+
+      { id:'newborn10', num:'N10', risk:'medium', title:'Dummy/Pacifier Introduction Timing',
+        who:'Breastfeeding parents considering a dummy in the newborn period',
+        what:'Introducing a dummy before breastfeeding is well established',
+        where:'At sleep times',
+        why:'Early dummy use in the first weeks can interfere with latch and milk supply; once feeding is well established, dummy use at sleep times is associated with a protective effect.',
+        how:'Wait until breastfeeding is well established, commonly around 3–4 weeks, unless formula feeding from the start. Offer at sleep times only, never force it if refused, and never attach it with a cord or ribbon around the neck.',
+        measurement:'Introduce from roughly 3–4 weeks once breastfeeding is established; formula-fed babies may start earlier; look for a recognised soother safety standard.',
+        example:'A breastfeeding mother is keen to use a dummy from day one to settle her fussy newborn; her midwife suggests waiting a few weeks first to protect the developing latch.',
+        tip:'If a dummy falls out during sleep, there\'s no need to replace it repeatedly through the night — that\'s completely normal and doesn\'t need "fixing."' },
+
+      { id:'newborn11', num:'N11', risk:'high', title:'Skin-to-Skin Contact — Safe Practice',
+        who:'Parents doing skin-to-skin or kangaroo care',
+        what:'Falling asleep while holding baby upright, skin-to-skin, especially on a sofa or in an armchair',
+        where:'Wherever skin-to-skin contact happens',
+        why:'Skin-to-skin is genuinely valuable for bonding, temperature stability, and feeding, but an adult falling asleep with baby prone on their chest is a well-recognised suffocation risk, particularly on soft furniture.',
+        how:'Do skin-to-skin while awake and alert, ideally with another adult present or an alarm set. Move baby to their own safe surface the moment you feel sleepy, and avoid skin-to-skin on a sofa altogether during solo night feeds.',
+        measurement:'Never on a sofa or armchair; always supervised and awake.',
+        example:'A father enjoys long skin-to-skin sessions in the evenings; his partner sets a phone alarm each time as a safety habit, especially after a broken night.',
+        tip:'Treat the "getting sleepy" feeling as your cue to move baby to the crib, not to settle in further.' },
+
+      { id:'newborn12', num:'N12', risk:'low', title:'Understanding the Moro (Startle) Reflex',
+        who:'Parents unfamiliar with newborn reflex movements',
+        what:'Mistaking the normal startle reflex for illness or a seizure, or reacting by choosing an unsafe soothing method',
+        where:'Anywhere baby is startled by noise or movement',
+        why:'The newborn Moro reflex causes sudden arm-flinging and can wake baby repeatedly; understanding it as normal helps parents choose safe soothing methods, such as an approved swaddle, rather than unsafe ones such as bed-sharing to settle.',
+        how:'Learn to recognise the Moro reflex as normal and expect it to fade by roughly 3–4 months. Use an approved swaddle technique or a sleep sack for settling rather than bringing baby into the adult bed.',
+        measurement:'Typically present from birth and fades by around 3–4 months of age.',
+        example:'A newborn flings both arms out and cries at a sudden door slam; the parents recognise the Moro reflex, resettle calmly, and don\'t worry it signals a problem.',
+        tip:'A well-fitted swaddle or sleep sack often reduces how often the startle reflex wakes baby fully.' },
+
+      { id:'newborn13', num:'N13', risk:'high', title:'Bed Rails Are Not a Newborn Sleep Solution',
+        who:'Parents considering an adult bed with a rail for a newborn',
+        what:'Using an adult bed with a bed rail as the newborn\'s main sleep space',
+        where:'The parents\' bedroom',
+        why:'Bed rails prevent falls for older children but do nothing to address the suffocation or overlay risk that makes an adult bed unsuitable as a newborn\'s primary sleep surface.',
+        how:'Use a dedicated crib, bassinet, or a certified bedside co-sleeper crib that attaches securely to the parents\' bed with its own firm mattress and no gap, rather than relying on a bed rail alone.',
+        measurement:'Bedside/co-sleeper cribs should meet a recognised safety standard and be firmly attached with zero gap to the parent bed.',
+        example:'A family buys a bed rail thinking it makes co-sleeping "safe enough"; a health visitor explains why a proper bedside crib achieves the same closeness far more safely.',
+        tip:'If you want baby close at night, a bedside crib gives you arm\'s-reach access without the risks of a shared surface.' },
+
+      { id:'newborn14', num:'N14', risk:'medium', title:'Planning the Nursery Layout Ahead of Mobility',
+        who:'Anyone setting up a newborn\'s room',
+        what:'Blind or curtain cords and window openings positioned near where the crib might later be moved',
+        where:'The nursery or wherever the crib is sited',
+        why:'Even though a newborn isn\'t yet mobile, rooms get rearranged during the sleep-deprived early weeks, and planning a safe layout now avoids having to relearn hazards later under the crib.',
+        how:'Position the crib away from windows and any blind or curtain cords from the outset. Choose cordless or cleated blinds, and plan the room\'s longer-term layout with the mobile months already in mind.',
+        measurement:'Crib clear of any cord within reach radius; blind cords cleated at least 1.5m (5ft) up.',
+        example:'A family redecorating the nursery chooses cordless blinds from the start rather than retrofitting safety later.',
+        tip:'Sort cord safety now, while it\'s a five-minute job, rather than in a rush once baby starts reaching for things.' }
+    ]
+  },
+  {
+    id: 2, name: 'Feeding, Weight & Digestion', icon: '🍼',
+    desc: '14 checks covering feeding frequency, weight-loss thresholds, latch and positioning, reflux and burping, and safe formula or expressed-milk preparation.',
+    checks: [
+      { id:'newborn15', num:'N15', risk:'high', title:'Feeding Frequency in the First 28 Days',
+        who:'All feeding parents and caregivers',
+        what:'Under-feeding because of misjudging a newborn\'s appetite or trying to stretch to a schedule too soon',
+        where:'Wherever feeding happens, day and night',
+        why:'A newborn\'s stomach is tiny and both breast milk and formula digest quickly, so feeding little and often is normal and necessary rather than a sign of a problem.',
+        how:'Feed roughly 8–12 times per 24 hours if breastfeeding, or follow formula-feeding guidance from a health professional. Feed on hunger cues rather than the clock alone, and wake a sleepy newborn to feed if it has been over 4 hours.',
+        measurement:'8–12 feeds per 24 hours typical; wake to feed if the gap exceeds 4 hours in the first weeks.',
+        example:'A tired parent lets a very sleepy newborn go 6 hours between feeds "so everyone can rest"; a midwife explains why waking baby to feed matters in these early weeks.',
+        tip:'Watch for early hunger cues — rooting, hand-to-mouth, smacking lips — rather than waiting for crying, which is a late sign.' },
+
+      { id:'newborn16', num:'N16', risk:'critical', title:'Weight-Loss Threshold & Regain Window',
+        who:'Parents monitoring weight after birth and discharge',
+        what:'Normal early weight loss mistaken for a feeding problem, or an excessive loss that goes unnoticed',
+        where:'At scheduled weight checks',
+        why:'Losing some weight in the first days as fluid shifts is normal, but loss beyond a certain threshold, or not regaining birth weight within about two weeks, needs clinical review.',
+        how:'Attend every scheduled weight check, ask for the loss expressed as a percentage of birth weight, and seek review promptly if the loss is significant or regain is delayed.',
+        measurement:'Loss of up to roughly 7–10% of birth weight is commonly considered within a normal range; most healthy newborns regain birth weight by 10–14 days — loss beyond this, or delayed regain, needs review.',
+        example:'A newborn has lost 9% of birth weight by day 4; the midwife increases feeding support and plans an earlier recheck rather than waiting for the standard schedule.',
+        tip:'Keep a simple note of each weigh-in date and figure — it makes the trend, not just a single number, easy to show any health professional.' },
+
+      { id:'newborn17', num:'N17', risk:'high', title:'Nappy Output as a Feeding Indicator',
+        who:'Parents unsure whether baby is feeding enough',
+        what:'Not tracking wet and dirty nappies as a simple sign of adequate intake',
+        where:'At every nappy change',
+        why:'Nappy count rises day-by-day in the first week and is one of the simplest ways to judge intake without a scale in front of you.',
+        how:'Expect wet nappies to increase roughly in line with day of life across the first week, and stools to move from black meconium to yellow and seedy by around day 4–5. Contact a health professional promptly if output drops.',
+        measurement:'By day 5–6, typically at least 6 heavy wet nappies and several stools per 24 hours as feeding becomes established.',
+        example:'A father keeps a simple tally on his phone of wet and dirty nappies each day, which reassures the health visitor at the day-5 check that feeding is well established.',
+        tip:'A "heavy" wet nappy should feel noticeably weighted, not just barely damp — lift one to get a feel for the difference early on.' },
+
+      { id:'newborn18', num:'N18', risk:'high', title:'Latch & Positioning for Breastfeeding Parents',
+        who:'Breastfeeding parents in the first weeks',
+        what:'A shallow or painful latch that leads to poor milk transfer and nipple damage',
+        where:'Wherever breastfeeding takes place',
+        why:'A correct latch — wide mouth, chin leading, more areola visible above the lip than below — is the difference between comfortable, effective feeding and pain with poor weight gain.',
+        how:'Bring baby to the breast rather than leaning in, aim nose-to-nipple so the chin makes first contact, and listen and watch for rhythmic swallowing rather than just sucking. Seek help from a lactation consultant or infant-feeding specialist early if pain persists.',
+        measurement:'Feeds should not remain painful beyond the first few seconds of latch by day 3–4; seek help if pain persists.',
+        example:'A new mother assumes nipple pain is "just something you get used to"; a feeding specialist adjusts the latch angle and the pain resolves within a day.',
+        tip:'If a latch hurts, break the seal gently with a clean finger in the corner of baby\'s mouth and try again rather than persisting through pain.' },
+
+      { id:'newborn19', num:'N19', risk:'high', title:'Paced, Responsive Bottle Feeding',
+        who:'Anyone bottle-feeding a newborn, whether formula or expressed breast milk',
+        what:'Fast-flow teats or pressure to "finish the bottle," which can lead to overfeeding, wind, and reflux',
+        where:'Wherever bottle feeds happen',
+        why:'A newborn can be over-fed on a bottle more easily than at the breast because the flow isn\'t controlled by the baby in the same way; paced feeding mimics a more natural feeding rhythm.',
+        how:'Hold baby semi-upright, use a slow-flow newborn-rated teat, let baby pause and take breaks, and watch for fullness cues such as turning away or relaxed hands rather than always emptying the bottle.',
+        measurement:'Slow-flow, newborn-rated teat; pause the feed every 20–30 seconds to check baby\'s cues.',
+        example:'A grandparent used to bottle-feeding an older baby is shown the paced technique for a newborn, and notices baby settles more comfortably afterwards.',
+        tip:'Tilt the bottle only enough to keep the teat filled with milk, not fully upended — this naturally slows the flow.' },
+
+      { id:'newborn20', num:'N20', risk:'critical', title:'Formula Preparation Temperature & Safety',
+        who:'Parents and caregivers preparing formula feeds',
+        what:'Mixing formula powder with water that isn\'t hot enough to reduce bacteria, or serving milk too hot',
+        where:'Wherever bottles are prepared',
+        why:'Formula powder is not sterile, and water at the correct temperature helps reduce bacteria that can be present in it, while milk that is too hot risks scalding baby\'s mouth.',
+        how:'Boil fresh water and let it cool to no less than about 70°C (158°F) before adding it to the powder, mix thoroughly, then cool the made-up bottle under a cold tap and test a drop on the inside of your wrist before offering it.',
+        measurement:'Mixing water at least 70°C (158°F); feeding temperature body-warm, always tested on the wrist first.',
+        example:'A tired parent uses lukewarm water "to save time" one night; a partner reminds them why the 70°C step matters even at 3am.',
+        tip:'Boil a full kettle once and keep a thermos of correctly cooled water ready for night feeds, rather than starting from scratch each time.' },
+
+      { id:'newborn21', num:'N21', risk:'medium', title:'Reflux, Possetting & Safe Positioning After Feeds',
+        who:'Parents of newborns who bring up milk frequently',
+        what:'Mistaking normal possetting for a problem, or unsafe handling straight after a feed',
+        where:'During and after every feed',
+        why:'A loose valve at the top of the stomach is normal in newborns, and most possetting is harmless — but positioning still matters for comfort, and back-sleeping remains safest even shortly after a feed.',
+        how:'Hold baby upright for roughly 15–20 minutes after feeds where practical, and avoid vigorous handling straight afterwards. Continue placing baby on their back to sleep even if they\'ve recently fed or possetted — this does not increase choking risk and remains the safest position.',
+        measurement:'Seek review for forceful or projectile vomiting, blood in vomit, poor weight gain, or persistent distress — these go beyond typical possetting.',
+        example:'A new parent is anxious about "wasting" milk that comes back up after most feeds; a health visitor confirms this is normal possetting, not a feeding failure.',
+        tip:'Keep a light muslin cloth within reach at every feed — possetting is far less stressful when you\'re not scrambling for something to catch it.' },
+
+      { id:'newborn22', num:'N22', risk:'low', title:'Burping Technique & When It Isn\'t Needed',
+        who:'Caregivers feeding a newborn',
+        what:'Over-vigorous burping attempts, or unnecessary worry when no burp comes',
+        where:'During and after feeds',
+        why:'Swallowed air can cause discomfort, but not every baby needs a big burp every time — gentle technique is enough, and a quiet feed doesn\'t need forcing.',
+        how:'Hold baby upright against your shoulder, or sitting supported on your lap, with gentle rubbing or patting on the back. A minute or two is usually enough, and it\'s fine if nothing comes up at all.',
+        measurement:'No specific volume or sound is required — comfort is the goal, not a guaranteed burp.',
+        example:'A parent persists for ten minutes trying to get a burp from a settled, sleepy newborn; a midwife reassures them that gentle effort is enough and baby can simply go down to sleep.',
+        tip:'If baby is calm and drowsy after a feed, a brief upright pause is often all the "burping" needed.' },
+
+      { id:'newborn23', num:'N23', risk:'medium', title:'Feeding\'s Link to Clearing Jaundice',
+        who:'Parents of a jaundiced newborn',
+        what:'Not increasing feed frequency when mild jaundice is present, which can allow dehydration to make it worse',
+        where:'At every feed while jaundice is being monitored',
+        why:'Frequent, effective feeding helps the body clear bilirubin through stools, while poor feeding can allow jaundice to progress.',
+        how:'Feed at least 8–12 times per 24 hours while jaundice is present, waking baby if needed, and monitor nappy output closely. Seek review promptly if baby becomes too sleepy to feed well.',
+        measurement:'See the jaundice checks in Zones 3 and 4 for visual assessment and bilirubin-testing thresholds.',
+        example:'A mildly jaundiced newborn is feeding well every 2–3 hours; the midwife notes this is helping keep the jaundice mild and reassures the parents.',
+        tip:'If jaundice is present, treat feeding frequency as part of the treatment, not just routine care.' },
+
+      { id:'newborn24', num:'N24', risk:'medium', title:'Tongue-Tie Awareness',
+        who:'Breastfeeding parents with persistent latch pain or poor milk transfer',
+        what:'An undiagnosed tongue-tie restricting effective, comfortable latching',
+        where:'Assessed by a qualified health professional',
+        why:'A tight lingual frenulum can limit the tongue movement needed for an effective, pain-free latch in some newborns, and can affect both feeding comfort and weight gain if unaddressed.',
+        how:'If latch pain, clicking sounds during feeds, or poor weight gain persist despite positioning help, ask a health professional or infant-feeding specialist to assess for tongue-tie.',
+        measurement:'Assessment and any treatment should always be carried out by a qualified health professional.',
+        example:'A mother\'s ongoing nipple pain doesn\'t resolve despite repeated latch coaching; an assessment identifies a tongue-tie, and feeding improves after treatment.',
+        tip:'Persistent pain beyond the first few days of feeding is worth raising specifically, even if you\'re unsure what\'s causing it.' },
+
+      { id:'newborn25', num:'N25', risk:'low', title:'Newborn Stomach Capacity — Realistic Expectations',
+        who:'Parents worried their newborn isn\'t taking "enough"',
+        what:'Over-filling a very small newborn stomach based on adult-portion assumptions',
+        where:'At every feed in the first week',
+        why:'A day-1 newborn stomach holds only a small volume, expanding gradually over the following days and weeks; expecting large volumes early causes unnecessary worry or overfeeding.',
+        how:'Expect roughly 5–7ml (about a teaspoon) per feed on day 1, rising to roughly 22–27ml (about an ounce) by day 3, and around 45–60ml (1.5–2fl oz) by day 7, continuing to rise through the rest of the month. Follow baby\'s cues over rigid volume targets.',
+        measurement:'Approximate volumes: day 1 ~5–7ml, day 3 ~22–27ml, day 7 ~45–60ml, rising further by day 28.',
+        example:'New parents worry their day-2 newborn only takes a tiny amount per feed; a midwife explains this matches the expected stomach capacity for that day of life exactly.',
+        tip:'Trust the trend across days, not any single feed — some feeds are always bigger or smaller than others.' },
+
+      { id:'newborn26', num:'N26', risk:'high', title:'Feeding-Parent Wellbeing — Engorgement & Mastitis Signs',
+        who:'Breastfeeding parents',
+        what:'Ignoring a painful, hot, red area of the breast, or fever in the feeding parent',
+        where:'Anywhere breastfeeding takes place',
+        why:'Engorgement and blocked ducts can progress to mastitis, which needs prompt attention and can affect a parent\'s ability to care for the newborn if left untreated.',
+        how:'Feed frequently and fully drain the breast, use warmth before feeds and cold after for comfort, and seek medical review promptly for fever, spreading redness, or flu-like symptoms.',
+        measurement:'Seek same-day advice for a temperature above 38°C (100.4°F) accompanied by breast symptoms.',
+        example:'A breastfeeding mother develops a hot, red patch and feels feverish overnight; she contacts her midwife the same day rather than waiting to see if it settles.',
+        tip:'Keep feeding through mastitis where possible (with medical advice) — frequent draining is part of the treatment, not something to avoid.' },
+
+      { id:'newborn27', num:'N27', risk:'high', title:'Safe Preparation & Storage of Expressed Milk or Made-Up Formula',
+        who:'Parents batch-preparing feeds',
+        what:'Unsafe storage times or temperatures for expressed breast milk or made-up formula',
+        where:'Kitchen, fridge, and changing area',
+        why:'Both expressed milk and made-up formula can support bacterial growth if stored too long or at the wrong temperature.',
+        how:'Label every bottle with date and time, refrigerate promptly, and follow safe storage windows. Never reheat milk in a microwave, since it heats unevenly and can scald, and always discard any feed left over after baby has fed from it.',
+        measurement:'Freshly expressed milk is generally safe at room temperature short-term, refrigerated for a few days, or frozen for longer per current feeding guidance; made-up formula should be used within 2 hours or refrigerated and used within 24 hours, and never reheated twice.',
+        example:'A parent reheats a leftover bottle from an earlier feed to save time; a health visitor explains why any milk baby has already fed from should be discarded, not reused.',
+        tip:'A simple labelled system — date and time on every bottle — removes the guesswork on a broken night.' },
+
+      { id:'newborn28', num:'N28', risk:'medium', title:'Vitamin D and Vitamin K Follow-Up',
+        who:'Parents of breastfed and formula-fed newborns',
+        what:'Missing recommended vitamin D supplementation, or uncertainty about the vitamin K dose given at birth',
+        where:'At home, ongoing from birth',
+        why:'Vitamin K is usually given shortly after birth to prevent a rare but serious bleeding disorder, while vitamin D supports bone health, and breast milk alone may not provide enough of it.',
+        how:'Confirm that the vitamin K dose — injection or oral course — was completed as advised. Start vitamin D drops for a breastfed newborn as locally recommended; formula-fed babies taking sufficient formula usually don\'t need additional vitamin D.',
+        measurement:'Vitamin D commonly around 8.5–10µg (340–400 IU) daily for breastfed infants from birth, per WHO/NICE-aligned guidance.',
+        example:'A breastfeeding mother assumes vitamin D drops are optional; her health visitor clarifies they\'re specifically recommended because breast milk alone doesn\'t supply enough.',
+        tip:'Keep vitamin D drops next to your usual feeding station so giving them becomes part of the daily routine, not an extra task to remember.' }
+    ]
+  },
+  {
+    id: 3, name: 'Bathing, Cord Care & Skin', icon: '🛁',
+    desc: '14 checks covering umbilical cord stump care, first bathing technique, jaundice recognition, and gentle newborn skin and nail care.',
+    checks: [
+      { id:'newborn29', num:'N29', risk:'medium', title:'Umbilical Cord Stump — Keep Clean & Dry',
+        who:'Caregivers of a newborn with an unhealed cord stump',
+        what:'Covering the stump, using antiseptics unnecessarily, or getting it repeatedly wet',
+        where:'The nappy area and cord stump site',
+        why:'The stump heals fastest when exposed to air and kept dry; unnecessary products can delay separation or irritate the surrounding skin.',
+        how:'Fold the nappy below the stump so air can reach it, dress baby with the area exposed where practical, and clean with plain water only if it becomes soiled. Avoid submersion bathing until the stump has separated.',
+        measurement:'No antiseptic is needed for a normal-looking stump unless specifically advised by a health professional.',
+        example:'A new parent is tempted to buy a special "cord powder" seen online; a midwife confirms plain, dry air care is all that\'s needed.',
+        tip:'Fold or roll the front of the nappy down below the stump — a simple habit that keeps it dry all day.' },
+
+      { id:'newborn30', num:'N30', risk:'medium', title:'Cord Stump Healing Window & Infection Signs',
+        who:'Parents monitoring cord healing',
+        what:'Not recognising signs that suggest infection rather than normal healing',
+        where:'Checked daily at nappy changes',
+        why:'Most stumps separate within a defined window; spreading redness, pus, a bad odour, or fever around the stump suggest infection needing prompt review.',
+        how:'Check daily and expect the stump to dry, darken, and detach on its own. Seek same-day advice for spreading redness, discharge, bleeding that doesn\'t stop with gentle pressure, or fever.',
+        measurement:'Typical separation window is roughly 7–21 days after birth; seek review if it hasn\'t separated well beyond this or if infection signs appear.',
+        example:'A stump that looks slightly moist but otherwise normal at day 10 is reassuring; spreading redness and a foul smell at day 6 prompts an urgent same-day call instead.',
+        tip:'A quick daily glance at nappy-change time is enough — no need for a separate dedicated check.' },
+
+      { id:'newborn31', num:'N31', risk:'high', title:'Sponge or Top-and-Tail Bathing Before the Cord Separates',
+        who:'Caregivers bathing a newborn with the cord stump still attached',
+        what:'Full immersion bathing before the stump has separated and healed',
+        where:'Wherever baby is washed',
+        why:'Keeping the stump dry supports healing, and a gentle sponge or "top-and-tail" wash keeps baby clean without submerging the cord area.',
+        how:'Wash the face, neck folds, and nappy area with warm water and cotton wool or a soft cloth, keeping the cord area dry throughout. Move to shallow bath bathing only once the stump has fully separated and the area looks healed.',
+        measurement:'Top-and-tail washing until stump separation, then move to shallow bath bathing.',
+        example:'A parent is keen to give a "proper bath" on day 2; the midwife shows the top-and-tail technique instead and explains why it protects the healing stump.',
+        tip:'Have a warm towel laid out before you start — top-and-tailing is quick, but baby still loses heat fast if left uncovered.' },
+
+      { id:'newborn32', num:'N32', risk:'critical', title:'Bath Water Temperature & Newborn Bathing Frequency',
+        who:'Anyone bathing a newborn',
+        what:'Water that is too hot, risking scalds, or too cold, causing rapid heat loss — and over-bathing that dries out newborn skin',
+        where:'Wherever bathing takes place',
+        why:'Newborn skin is thinner and loses heat quickly, so correct temperature and sensible frequency protect against both burns and unnecessary skin drying.',
+        how:'Run cold water first, then add hot, and test with your elbow or a bath thermometer before placing baby in. Support the head and shoulders throughout. Two to three full baths a week is usually enough in the newborn period, with top-and-tailing on other days.',
+        measurement:'Bath water 37–38°C (98.6–100.4°F); 2–3 full baths per week typical, more only if specifically advised.',
+        example:'A parent runs a bath that feels "just warm" to an adult hand; a bath thermometer reveals it\'s actually 41°C (106°F) — well above the safe range.',
+        tip:'Keep a simple floating bath thermometer in the bathroom — testing with an elbow alone is a good backup, not a substitute.' },
+
+      { id:'newborn33', num:'N33', risk:'medium', title:'Newborn Skin Peeling & Vernix — What\'s Normal',
+        who:'Parents concerned about newborn skin appearance',
+        what:'Mistaking normal newborn skin changes for a problem, or over-treating with products',
+        where:'All over the body, most noticeable on hands, feet, and creases',
+        why:'Some peeling and residual vernix — the waxy coating present at birth — in the first couple of weeks is entirely normal and needs no treatment.',
+        how:'Leave vernix to absorb naturally rather than scrubbing it off, avoid harsh soaps, and only moisturise if specifically advised. Seek review for widespread redness, blistering, or weeping skin.',
+        measurement:'Normal peeling typically resolves within the first 1–2 weeks without treatment.',
+        example:'New parents worry about peeling skin on their newborn\'s feet at 10 days old; a health visitor confirms this is completely normal and needs no cream.',
+        tip:'Resist the urge to "help" flaking skin along — it comes away naturally without any intervention.' },
+
+      { id:'newborn34', num:'N34', risk:'low', title:'Nail Care Without the Scissors Risk',
+        who:'Caregivers trimming or covering newborn nails',
+        what:'Using standard adult nail scissors or clippers on tiny newborn fingers',
+        where:'Wherever nail care is done',
+        why:'Newborn nails grow quickly and can scratch the face, but standard adult tools are hard to control accurately on such small fingers.',
+        how:'Use blunt-tipped baby nail scissors or a fine emery file, and trim after a bath when nails are softer. Filing rather than cutting is a good lower-risk alternative, and scratch mitts can help as a temporary measure rather than a long-term solution.',
+        measurement:'Trim as needed, typically every few days as nails grow.',
+        example:'A nervous new parent avoids trimming nails at all for two weeks "in case I cut her"; a relative shows the filing technique as a gentler starting point.',
+        tip:'Trim while baby is asleep or feeding calmly — much easier than attempting it during an alert, wriggly moment.' },
+
+      { id:'newborn35', num:'N35', risk:'medium', title:'Nappy Area Care & Normal Stool Transition',
+        who:'Caregivers changing newborn nappies',
+        what:'Not recognising the normal changes in stool colour and consistency, or leaving nappy rash untreated',
+        where:'At every nappy change',
+        why:'Stools change from black-green meconium to a transitional stage to yellow and seedy over the first week as feeding becomes established; nappy rash is common but needs simple, prompt care.',
+        how:'Change nappies promptly, clean front-to-back, briefly air-dry the skin at changes, and apply a barrier cream if redness appears. Seek review if a rash doesn\'t improve within a few days or looks infected — spreading, weeping, or with satellite spots suggesting a yeast infection.',
+        measurement:'Stool transition is typically complete by day 4–5.',
+        example:'A parent is alarmed by the black, tar-like first stools; a midwife explains this is normal meconium and describes the colour changes to expect over the coming days.',
+        tip:'A short burst of nappy-off time at each change lets the skin air-dry and helps prevent rash from developing.' },
+
+      { id:'newborn36', num:'N36', risk:'high', title:'Visual Jaundice Check in Natural Light',
+        who:'Caregivers checking a newborn for jaundice daily',
+        what:'Missing early jaundice because artificial light masks the yellow tinge',
+        where:'Near a window in daylight',
+        why:'Jaundice is common in the newborn period and usually harmless, but needs monitoring because a small proportion of babies need treatment.',
+        how:'Check in daylight near a window rather than under artificial light. Gently press a finger on the forehead or the tip of the nose and look for a yellow tinge as the pressure releases — the "blanch test." Check the whites of the eyes and the gums too, especially on days 2–5.',
+        measurement:'Check at least once daily on days 2–7; check more often if jaundice has already been noted.',
+        example:'A jaundiced newborn looks fine under the yellowish nursery lamp at night, but the tinge is much clearer when checked by the window the next morning.',
+        tip:'Build the daylight check into an existing routine, such as the first nappy change after morning light comes in.' },
+
+      { id:'newborn37', num:'N37', risk:'critical', title:'Jaundice Peak-Day Window & When to Seek Urgent Help',
+        who:'Parents of a jaundiced newborn',
+        what:'Assuming all jaundice is harmless and delaying review during the highest-risk days',
+        where:'Anywhere jaundice is noticed',
+        why:'Jaundice commonly peaks around day 3–5 and usually clears within 2 weeks, but jaundice appearing in the first 24 hours, spreading rapidly, or accompanied by a floppy or poorly feeding baby needs urgent same-day assessment.',
+        how:'Seek urgent review if jaundice appears within the first 24 hours of life, spreads to the arms, legs, or soles, or is accompanied by poor feeding, a high-pitched cry, or extreme sleepiness. Bilirubin testing and treatment thresholds are set by health professionals, not by visual judgement alone.',
+        measurement:'Peak typically day 3–5; jaundice in the first 24 hours means urgent same-day review; most physiological jaundice clears within 2 weeks.',
+        example:'A newborn looks yellow from birth in the delivery room; this is treated as urgent, unlike the much more common mild jaundice that appears from day 2–3 onward.',
+        tip:'When in doubt about timing or severity, describe exactly when you first noticed it — the timeline itself is clinically useful information.' },
+
+      { id:'newborn38', num:'N38', risk:'medium', title:'Eye Discharge & Blocked Tear Duct Hygiene',
+        who:'Caregivers noticing sticky or watery newborn eyes',
+        what:'Not distinguishing a common blocked tear duct from an eye infection',
+        where:'Around the eyes, checked at routine care',
+        why:'Blocked tear ducts are common and usually resolve on their own, but a red, swollen, or pus-producing eye needs review to rule out infection.',
+        how:'Wipe each eye with a separate clean cotton wool pad dampened with cooled boiled water, moving from the inner to the outer corner. Seek review for redness, swelling, or persistent thick discharge.',
+        measurement:'Seek review if not improving within a few days, or sooner if the eye looks red or swollen.',
+        example:'A newborn has mild, clear sticky discharge from one eye that clears with gentle wiping over a week — a health visitor confirms this is a typical blocked tear duct.',
+        tip:'Use a fresh cotton wool pad for each eye and each wipe, to avoid transferring anything between them.' },
+
+      { id:'newborn39', num:'N39', risk:'low', title:'Keeping Baby Warm Before, During & After Bathing',
+        who:'Caregivers bathing a newborn',
+        what:'Heat loss during undressing, bathing, and drying, especially in a cool bathroom',
+        where:'The bathing area',
+        why:'Newborns lose heat quickly once wet and undressed, so a warm bathing routine protects against rapid drops in temperature.',
+        how:'Warm the room first, have the towel and clothes ready before undressing baby, bathe quickly and efficiently, and dry and dress promptly afterwards, adding a hat only if the room is cool.',
+        measurement:'Bathroom pre-warmed; total time spent undressed kept to a minimum.',
+        example:'A family bathes their newborn in a chilly bathroom in the evening; adding a small heater beforehand and having everything laid out cuts the whole process to a couple of minutes.',
+        tip:'Lay out the towel, nappy, and clothes in the order you\'ll use them before you even start running the water.' },
+
+      { id:'newborn40', num:'N40', risk:'medium', title:'Newborn-Safe Skin & Bath Products',
+        who:'Parents choosing bathing and skin products',
+        what:'Fragranced, harsh, or adult-formulated products used on newborn skin',
+        where:'Wherever skin products are applied',
+        why:'A newborn\'s skin barrier is still developing and is more easily irritated, and with some products more able to absorb ingredients than adult skin.',
+        how:'Use fragrance-free, newborn-formulated washes sparingly, or plain water only for the first weeks. Avoid talcum powder because of inhalation risk, avoid inserting cotton buds into ears or nose, and patch-test any new product before wider use.',
+        measurement:'Plain water bathing is sufficient for most newborns in the first month.',
+        example:'A gift set of strongly scented baby products goes unused after a midwife explains why plain water is enough for the first few weeks.',
+        tip:'If in doubt about a product, the simplest option — plain water and a soft cloth — is very rarely the wrong choice for a newborn.' },
+
+      { id:'newborn41', num:'N41', risk:'low', title:'Milia, Heat Rash & Other Common Newborn Skin Marks',
+        who:'Parents concerned about newborn skin marks',
+        what:'Mistaking harmless, common newborn skin findings for illness',
+        where:'Face and body',
+        why:'Small white bumps (milia), heat rash, or blotchy colour changes are common in newborns and typically resolve without any treatment.',
+        how:'No treatment is needed for milia. Keep baby appropriately dressed and the room at a comfortable temperature to reduce heat rash, and seek review for a widespread rash with fever, blistering, or if you\'re simply unsure.',
+        measurement:'Milia typically resolves within a few weeks without treatment.',
+        example:'Tiny white spots across a newborn\'s nose worry new parents at the first check; the midwife confirms this is common milia and needs no cream or treatment.',
+        tip:'Photograph any new mark once, so you can easily check later whether it\'s changing over the following days.' },
+
+      { id:'newborn42', num:'N42', risk:'high', title:'Bathroom Supervision — Never Leave a Newborn Unattended',
+        who:'Anyone bathing a newborn',
+        what:'Leaving baby alone in or right next to water, even briefly, such as to answer the door or a phone',
+        where:'The bathing area',
+        why:'A newborn can lose consciousness in water silently and quickly, and there is no length of time that makes leaving them alone in a bath safe.',
+        how:'Gather everything you need before starting the bath, ignore the phone or door during bathing, and if you absolutely must leave, take baby with you wrapped in a towel rather than leaving them by the water.',
+        measurement:'Zero seconds of unsupervised time in or right next to water.',
+        example:'A doorbell rings mid-bath; the parent simply wraps baby in a towel and takes them to answer the door rather than leaving them in the water even briefly.',
+        tip:'Keep a spare towel within arm\'s reach specifically for this — it makes "just take baby with you" the easy, obvious choice.' }
+    ]
+  },
+  {
+    id: 4, name: 'Health Monitoring & Screening', icon: '💛',
+    desc: '14 checks covering normal newborn temperature and breathing, fever as an emergency, screening-test follow-ups, and the early signs of serious illness.',
+    checks: [
+      { id:'newborn43', num:'N43', risk:'high', title:'Taking & Reading Newborn Temperature Correctly',
+        who:'Caregivers checking a newborn\'s temperature',
+        what:'Inaccurate technique, or misunderstanding what counts as a normal newborn temperature range',
+        where:'At home, whenever a check is needed',
+        why:'A newborn\'s temperature can swing more than an older child\'s, so correct technique and knowing the normal range avoids both missed fevers and false alarms.',
+        how:'Use a digital thermometer under the arm (axillary) for home use, following the device\'s instructions. Take a baseline reading at the same time of day if baby seems unwell, and check before overwrapping rather than straight after.',
+        measurement:'Normal newborn temperature is approximately 36.5–37.5°C (97.7–99.5°F) axillary.',
+        example:'A parent checks temperature straight after unwrapping baby from a warm blanket and gets a falsely high reading; waiting a few minutes gives a more accurate result.',
+        tip:'Keep the same thermometer for all checks — switching devices can make small differences look more significant than they are.' },
+
+      { id:'newborn44', num:'N44', risk:'critical', title:'Fever in the First 28 Days Is a Medical Emergency',
+        who:'Parents of any newborn with a raised temperature',
+        what:'Treating a newborn fever like an older child\'s fever — a "wait and see" approach',
+        where:'Anywhere a fever is identified',
+        why:'A newborn\'s immune system is still immature, so a fever in the first 28 days can be the only visible sign of a serious infection and needs urgent same-day medical assessment rather than home management.',
+        how:'Any temperature of 38°C (100.4°F) or above in a baby under 28 days old needs urgent medical assessment the same day. Do not give fever-reducing medication first, and do not wait to see if it settles.',
+        measurement:'≥38°C (100.4°F) in the first 28 days means seeking urgent same-day medical review.',
+        example:'A newborn feels warm and slightly off-colour at 2am; the parents call the emergency/urgent-care line immediately rather than waiting until morning.',
+        tip:'Save your local emergency number and health advice line in your phone now, before you ever need them at 2am.' },
+
+      { id:'newborn45', num:'N45', risk:'medium', title:'Newborn Blood-Spot (Heel-Prick) Screening Follow-Up',
+        who:'Parents attending newborn screening appointments',
+        what:'Missing the screening test itself, or the results follow-up',
+        where:'At the scheduled screening appointment',
+        why:'A small heel-prick blood sample taken in the first days of life screens for several rare but serious conditions that are treatable if identified early.',
+        how:'Attend the screening appointment as scheduled, commonly around day 5 of life, keep any follow-up appointment or contact details, and respond promptly if contacted about a result that needs further testing.',
+        measurement:'Screening sample is typically taken around day 5 of life.',
+        example:'A family assumes "no news is good news" after the heel-prick test; the clinic explains they will only be contacted if further testing is needed, and to keep the appointment card just in case.',
+        tip:'Note the screening date somewhere memorable, so a follow-up call doesn\'t catch you off guard weeks later.' },
+
+      { id:'newborn46', num:'N46', risk:'medium', title:'Newborn Hearing Screening Follow-Up',
+        who:'Parents whose newborn has had a hearing screen',
+        what:'Not following up an "incomplete" or "refer" result',
+        where:'At the follow-up hearing appointment',
+        why:'An incomplete result is common and usually just means background noise interfered with the test — it doesn\'t mean there\'s a problem, but it does need a repeat test to confirm.',
+        how:'Attend all follow-up hearing appointments even if you notice no concern at home, since early identification supports early intervention if it is ever needed.',
+        measurement:'Initial screening is usually offered in the first days to weeks of life.',
+        example:'A newborn\'s first hearing screen is marked "incomplete" because of a noisy room; the repeat test a week later comes back clear.',
+        tip:'Try to book the repeat hearing test for a quiet time of day when baby is likely to be settled, to reduce the chance of another incomplete result.' },
+
+      { id:'newborn47', num:'N47', risk:'critical', title:'Jaundice — Bilirubin Threshold & Treatment Follow-Through',
+        who:'Parents of a newborn flagged for jaundice monitoring',
+        what:'Not completing recommended bilirubin blood tests or missing follow-up',
+        where:'At clinical appointments',
+        why:'A health professional uses a blood bilirubin level, sometimes plotted against baby\'s exact age in hours, to decide whether treatment such as phototherapy is needed — visual assessment alone can under- or over-estimate severity.',
+        how:'Attend all requested blood tests, follow any phototherapy or feeding-support advice exactly, and keep follow-up appointments even if baby looks better in the meantime.',
+        measurement:'Treatment thresholds are set by health professionals against age-specific bilirubin charts, not by visual judgement alone.',
+        example:'A newborn looks less yellow after a day of extra feeding, but the family still attends the scheduled recheck blood test as advised, which confirms the level is genuinely falling.',
+        tip:'Ask for the actual bilirubin number and what threshold applies at baby\'s current age — it turns an abstract worry into a concrete, trackable figure.' },
+
+      { id:'newborn48', num:'N48', risk:'critical', title:'Red-Flag Signs of Serious Newborn Illness',
+        who:'All caregivers of a newborn',
+        what:'Not recognising early, sometimes subtle, signs of serious illness such as infection',
+        where:'Anywhere, at any time',
+        why:'Newborns can deteriorate quickly, and the early signs are often non-specific — poor feeding, unusual sleepiness, a high-pitched or weak cry, pale, blue, or mottled skin, floppy tone, or unusually fast or laboured breathing.',
+        how:'Trust the instinct that "something isn\'t right" and seek urgent same-day assessment for any of these signs rather than waiting to see if they pass.',
+        measurement:'Any of: fever ≥38°C (100.4°F), poor feeding, lethargy, high-pitched cry, breathing difficulty, or blue/pale/mottled colour means urgent same-day review.',
+        example:'A newborn who is usually a good feeder suddenly feeds poorly and seems unusually floppy; the parents seek same-day assessment rather than waiting until the next scheduled check.',
+        tip:'If you\'re describing baby to a health professional as "just not himself," say that plainly — it\'s a genuinely useful clinical signal, not vague worry.' },
+
+      { id:'newborn49', num:'N49', risk:'high', title:'Normal vs Abnormal Newborn Breathing Patterns',
+        who:'Caregivers watching a sleeping newborn',
+        what:'Mistaking normal irregular ("periodic") breathing for a problem, or missing true signs of breathing difficulty',
+        where:'During sleep and rest',
+        why:'Brief pauses and an irregular rhythm during sleep are normal in newborns, but grunting, flaring nostrils, the chest pulling in between or under the ribs (recession), or blue lips are not.',
+        how:'Learn what normal periodic breathing looks like — brief pauses under about 10 seconds, breathing resuming on its own, colour staying pink. Seek urgent help for grunting, flaring, recession, or any pause that doesn\'t resolve or comes with a colour change.',
+        measurement:'Normal breathing rate roughly 30–60 breaths per minute; pauses under 10 seconds without colour change are typically normal.',
+        example:'A newborn\'s breathing briefly pauses for a few seconds during deep sleep and then resumes normally; a longer pause with blue-tinged lips the next day prompts an immediate emergency call.',
+        tip:'Watch the chest and colour together, not just whether baby seems to be breathing — colour is often the clearest signal.' },
+
+      { id:'newborn50', num:'N50', risk:'high', title:'Newborn Medication Caution — Nothing Without Advice',
+        who:'Caregivers considering giving any medicine to a newborn',
+        what:'Giving over-the-counter adult or child medications, including common pain or fever remedies, without newborn-specific dosing advice',
+        where:'Anywhere medication might be considered',
+        why:'Newborn dosing, metabolism, and safety profiles differ hugely from even slightly older infants, so incorrect dosing carries serious risk.',
+        how:'Never give any medication to a baby under 28 days without specific advice from a health professional for that baby. Keep all medicines in child-resistant packaging, locked away, and dispose of any leftover unlicensed remedies.',
+        measurement:'Zero unadvised medication in the first 28 days; child-resistant packaging to a recognised standard such as ISO 8317.',
+        example:'A well-meaning relative suggests "just a little" over-the-counter remedy for a fussy newborn; the parents decline and call their health professional instead.',
+        tip:'If in doubt about any product, including "natural" remedies, ask before giving — the newborn period is not the time to guess.' },
+
+      { id:'newborn51', num:'N51', risk:'medium', title:'Normal Newborn Reflex Movements vs Concerning Signs',
+        who:'Parents observing newborn movements',
+        what:'Mistaking normal reflex movements — Moro, rooting, grasp, stepping — for illness, or missing genuinely abnormal repetitive movements',
+        where:'Anywhere, at any time',
+        why:'Distinguishing normal reflexes from possible seizure activity matters both for reassurance and for prompt escalation when it\'s genuinely needed.',
+        how:'Learn the common newborn reflexes, and seek urgent review for rhythmic jerking that continues despite gentle repositioning or touch, unusual eye-rolling with stiffening, or repeated brief colour-change episodes.',
+        measurement:'Normal reflexes settle with gentle handling; genuinely concerning movement does not.',
+        example:'A newborn\'s arms fling out at a loud noise, a normal Moro reflex; rhythmic jerking of one arm that continues despite gentle holding is treated very differently and reviewed urgently.',
+        tip:'If you can film a concerning movement briefly and safely, it can help a health professional assess it accurately later.' },
+
+      { id:'newborn52', num:'N52', risk:'critical', title:'Infant CPR & Choking Response — Learn Before You Need It',
+        who:'All primary caregivers of a newborn',
+        what:'Not knowing newborn-specific resuscitation and choking response before an emergency happens',
+        where:'Anywhere an emergency could occur',
+        why:'Newborn and infant CPR technique — using two fingers or a thumb-encircling method for chest compressions, at a different depth and rate than adult CPR — and choking response both differ from adult or older-child technique.',
+        how:'Complete a recognised infant first-aid or CPR course before or soon after birth, know your local emergency number, and practise the correct compression landmark and rate before you ever actually need it.',
+        measurement:'Internationally aligned (ILCOR-based) newborn/infant compression depth is approximately one-third of chest depth, at a rate of 100–120 per minute.',
+        example:'A new parent completes a short infant first-aid course during pregnancy and feels far calmer about handling a choking or breathing emergency as a result.',
+        tip:'Practise the compression landmark on a doll or cushion during the course — muscle memory matters far more than remembering it in theory.' },
+
+      { id:'newborn53', num:'N53', risk:'medium', title:'Postnatal Health-Check Schedule',
+        who:'Parents attending scheduled newborn check-ups',
+        what:'Missing scheduled newborn or postnatal checks in the first days and weeks',
+        where:'At home or clinic appointments',
+        why:'Routine checks in the first days, and again around 1–2 weeks, screen feeding, weight, jaundice, heart, hips, eyes, and general wellbeing while any problems are still easy to address.',
+        how:'Attend every scheduled check even if baby seems completely well, and raise any concerns at each visit rather than waiting for the next one.',
+        measurement:'Typical schedule includes a first-day check, a check around day 5, and a further check around 2 weeks, varying by local practice.',
+        example:'A family considers skipping the day-5 check because baby seems fine; the appointment still goes ahead and picks up mild jaundice that needed monitoring.',
+        tip:'Write a short list of questions before each check — sleep-deprived brains forget things fast in the room.' },
+
+      { id:'newborn54', num:'N54', risk:'medium', title:'Growth Monitoring Beyond the Scale',
+        who:'Parents tracking newborn growth',
+        what:'Focusing only on weight and missing head circumference or length tracking, or comparing to other babies rather than baby\'s own trend',
+        where:'At scheduled growth checks',
+        why:'Weight, length, and head circumference plotted on a recognised growth chart over time show a baby\'s own trend, which matters more than a single measurement or a comparison to other babies.',
+        how:'Bring the growth record to every check, ask for all three measurements to be plotted, and discuss any crossing of centile lines with a health professional rather than judging by eye.',
+        measurement:'WHO growth-standard centile charts are used for full-term babies, with adjusted-age charts for babies born prematurely.',
+        example:'A parent compares their newborn\'s weight to a friend\'s baby born the same week; a health visitor redirects attention to their own baby\'s trend on the growth chart instead.',
+        tip:'Ask for a copy or photo of the growth chart at each visit so you can watch the trend build over time.' },
+
+      { id:'newborn55', num:'N55', risk:'critical', title:'Recognising Central Cyanosis (Blue Colour)',
+        who:'All caregivers',
+        what:'Not distinguishing normal newborn blue hands and feet — often just from being cool — from blue lips, tongue, or torso, which is serious',
+        where:'Anywhere, at any time',
+        why:'Blueness of the hands and feet alone is common and often harmless in a newborn, especially if they\'re cool, but blueness of the lips, tongue, or trunk is a medical emergency.',
+        how:'Check the colour of the lips and tongue, not just the hands and feet. Warm baby and recheck if only the hands or feet look blue, and call emergency services immediately for blue lips, tongue, or torso, or if baby is unresponsive.',
+        measurement:'Central cyanosis — lips, tongue, or torso — means calling emergency services immediately.',
+        example:'A newborn\'s hands look slightly blue-tinged after being unwrapped in a cool room; warming them resolves it within minutes, unlike blue lips, which would need an immediate call.',
+        tip:'Check colour in good light, not under a dim night-light, if you\'re ever unsure.' },
+
+      { id:'newborn56', num:'N56', risk:'medium', title:'Reading Pain & Distress Cues in a Newborn',
+        who:'Caregivers assessing whether a newborn is unwell or in pain',
+        what:'Difficulty judging distress in a baby who cannot speak',
+        where:'Anywhere, at any time',
+        why:'Newborns show distress through cues — a specific high-pitched cry, grimacing, drawing the knees up, unusual stillness, or arching — which, combined with feeding and sleep changes, help build a fuller picture for both you and any health professional.',
+        how:'Note changes in cry, feeding, colour, alertness, and movement together rather than relying on any single sign alone, and describe all of these clearly if you seek medical advice.',
+        measurement:'Any combination of new symptoms is more informative than a single sign alone — report the whole picture.',
+        example:'A newborn\'s cry sounds different, feeding has dropped off, and they seem unusually still; described together, this paints a clearer clinical picture than any one detail alone.',
+        tip:'A short voice note describing what you\'re noticing, made in the moment, can be easier to relay accurately later than trying to remember it afterwards.' }
+    ]
+  },
+  {
+    id: 5, name: 'Transport, Outings & Equipment', icon: '🚗',
+    desc: '14 checks covering the first car-seat ride home, pram and babywearing safety, temperature layering outdoors, and safe first outings.',
+    checks: [
+      { id:'newborn57', num:'N57', risk:'critical', title:'First Ride Home — Correctly Fitted Rear-Facing Car Seat',
+        who:'Parents and caregivers transporting a newborn by car for the first time',
+        what:'An incorrectly fitted, wrong-size, or history-unknown second-hand car seat used for the discharge journey',
+        where:'The vehicle used for the first and every subsequent journey',
+        why:'This is very likely a newborn\'s first car journey and sets the pattern for every journey afterwards; UN R129 (i-Size) and equivalent standards specify rear-facing seats correctly sized and fitted for newborns.',
+        how:'Choose a rear-facing seat rated for newborn weight and length, have it fitted and checked before the due date, recline it according to the manufacturer\'s instructions for a newborn\'s weaker neck control, and keep it rear-facing for as long as possible afterwards.',
+        measurement:'Seat compliant with UN R129 (i-Size) or an equivalent recognised standard; rear-facing from birth.',
+        example:'A family has the car seat professionally checked at a fitting service before the birth, rather than fitting it for the first time on the day of discharge.',
+        tip:'Practise fitting and unfitting the seat before the birth — it\'s much easier to learn calmly at home than under pressure at pickup.' },
+
+      { id:'newborn58', num:'N58', risk:'critical', title:'Newborn Car Seat Recline Angle & Head Support',
+        who:'Anyone installing a car seat for a newborn',
+        what:'Too upright a recline angle, letting a newborn\'s head flop forward and restrict the airway',
+        where:'Every car journey',
+        why:'A newborn\'s neck cannot yet support their head against gravity, so the correct recline angle keeps the airway open throughout the journey.',
+        how:'Use the seat\'s built-in recline indicator, often a bubble level or marked line, set for a newborn. Add only manufacturer-approved head supports, never aftermarket padding not designed for the seat, and check the head position hasn\'t slumped forward during the journey.',
+        measurement:'Recline angle per the manufacturer\'s indicator for newborn weight and age, typically closer to reclined than upright settings.',
+        example:'A parent notices baby\'s chin has dropped toward the chest at a rest stop and adjusts the recline before continuing the journey.',
+        tip:'Check the recline indicator every time you install the seat in a different car, since floor angles differ between vehicles.' },
+
+      { id:'newborn59', num:'N59', risk:'critical', title:'Harness Fit — Pinch Test for a Newborn',
+        who:'Caregivers securing a newborn in a car seat',
+        what:'A harness that is too loose, allowing baby to slip, or straps that are twisted',
+        where:'Every time baby is placed in the car seat',
+        why:'A properly tightened, flat, untwisted harness is what keeps a newborn safely in the seat during a crash or sudden stop.',
+        how:'Perform the pinch test — if you can pinch excess webbing at the shoulder, tighten it further. The harness should sit snug with no more than a finger\'s width of slack, the chest clip level with the armpits, and any bulky outerwear removed before harnessing, using a blanket over the harness instead for warmth.',
+        measurement:'Pinch test shows no pinch-able slack; chest clip sits level with the armpits.',
+        example:'A parent harnesses baby in a thick winter suit "for warmth"; removing the suit and adding a blanket over the harness instead achieves a proper, safe fit.',
+        tip:'Do the pinch test every single time, even for a short trip — a loose harness on a five-minute drive is still a loose harness.' },
+
+      { id:'newborn60', num:'N60', risk:'critical', title:'Never Leave a Newborn Alone in a Parked Car',
+        who:'All drivers and caregivers',
+        what:'Leaving a newborn in a parked car even briefly, in any season',
+        where:'Any parked vehicle',
+        why:'A newborn\'s temperature regulation is poor, and car interiors heat or cool far faster than the outside air — no errand is worth the risk.',
+        how:'Always take baby with you, even for a "quick" stop, and use a reminder system such as a phone alarm or a bag placed in the back seat if you\'re worried about forgetting baby is there.',
+        measurement:'Zero minutes alone in a parked vehicle.',
+        example:'A parent gets out to pay for fuel and automatically takes baby with them rather than leaving the engine running "for a minute."',
+        tip:'Keep something you need — your bag, phone, or wallet — in the back seat next to the car seat, so you\'re prompted to check before walking away.' },
+
+      { id:'newborn61', num:'N61', risk:'high', title:'Premature or Small Newborns — Car Seat Tolerance Check',
+        who:'Parents of premature or low-birth-weight newborns',
+        what:'Assuming a standard car seat fitting is automatically safe without a specific check',
+        where:'Before the first journey home',
+        why:'Some premature or small newborns can experience breathing difficulty when seated semi-upright in a standard car seat, and a supervised tolerance test before discharge can identify this.',
+        how:'Ask your neonatal or postnatal team whether a car-seat challenge or tolerance test is recommended before your first journey, and follow any specific positioning advice given.',
+        measurement:'Tolerance testing is typically considered for babies born significantly preterm or at low birth weight, per local clinical guidance.',
+        example:'A baby born several weeks early undergoes a car-seat tolerance test on the ward before discharge, which reassures the team the seating position is safe for the drive home.',
+        tip:'Raise this proactively with the neonatal team rather than waiting to be asked — not every unit offers it automatically.' },
+
+      { id:'newborn62', num:'N62', risk:'high', title:'Lie-Flat Requirement for Newborn Prams & Pushchairs',
+        who:'Parents choosing pram or pushchair equipment',
+        what:'Using a seat unit that doesn\'t fully recline flat for a newborn',
+        where:'Wherever the pram or pushchair is used',
+        why:'A newborn\'s spine and airway need a fully flat, supported lying position; semi-upright seat units are not suitable until a baby has good head control.',
+        how:'Use a carrycot, lie-flat pram body, or a pushchair seat unit specifically rated as suitable "from birth" and able to recline fully flat, checking the manufacturer\'s minimum-age and recline guidance.',
+        measurement:'Seat or carrycot rated "suitable from birth" with a fully flat recline.',
+        example:'A stylish pushchair seat unit looks appealing but only reclines to a semi-upright angle; the family chooses the carrycot attachment instead for the newborn months.',
+        tip:'Check the recline angle in the shop or listing before buying — "suitable from birth" should mean genuinely flat, not just mostly reclined.' },
+
+      { id:'newborn63', num:'N63', risk:'high', title:'Babywearing Safety — TICKS Guidelines for a Newborn',
+        who:'Caregivers using a sling or baby carrier',
+        what:'Positioning that restricts a newborn\'s airway or lets the chin drop to the chest',
+        where:'Wherever a sling or carrier is used',
+        why:'Newborns have weak neck control, and a chin dropped to the chest in a curled carrier position can restrict breathing without any obvious struggle.',
+        how:'Follow the TICKS checklist — Tight, In view at all times, Close enough to kiss, Keep chin off chest, Supported back — checking frequently in the early weeks, especially with soft-structured or stretchy wraps.',
+        measurement:'Run through the TICKS check every single time baby is placed in the carrier.',
+        example:'A parent glances down mid-walk and notices baby\'s chin has tucked toward the chest; a quick adjustment restores an open airway position immediately.',
+        tip:'Practise getting baby into the carrier in front of a mirror at home first, so checking the TICKS points becomes second nature before you\'re out and about.' },
+
+      { id:'newborn64', num:'N64', risk:'medium', title:'Sun & UV Protection for a Newborn Outdoors',
+        who:'Caregivers taking a newborn outside',
+        what:'Direct sun exposure, or relying on sunscreen as the main protection for a very young baby',
+        where:'Any outdoor outing',
+        why:'Newborn skin is thin and more vulnerable to UV damage, and sunscreen is generally not recommended for the youngest babies, so shade and covering matter more.',
+        how:'Keep newborns out of direct sun, use a pram hood or parasol for shade, dress in lightweight covering clothing with a sun hat, and rely on shade rather than sunscreen as the main protection in the first weeks.',
+        measurement:'Avoid direct sun exposure; seek shade especially during the strongest UV hours of the day.',
+        example:'A family walking on a bright day keeps the pram hood extended and sticks to shaded paths rather than reaching for sunscreen on their 3-week-old.',
+        tip:'A lightweight, breathable cover over the pram gives shade without trapping heat the way a heavier blanket can.' },
+
+      { id:'newborn65', num:'N65', risk:'high', title:'Temperature Layering Rule for Outings',
+        who:'Caregivers dressing a newborn for outdoor trips',
+        what:'Over- or under-dressing a newborn relative to the weather',
+        where:'Any outdoor outing',
+        why:'Because newborns can\'t regulate temperature as efficiently as adults, a simple layering rule helps avoid both overheating and heat loss on outings.',
+        how:'Dress baby in roughly one more layer than you would need to be comfortable in the same conditions, check the back of the neck for warmth during the outing, and remove a layer promptly on entering a warm car or building.',
+        measurement:'"One layer more than you" rule; check the nape of the neck, not the hands, to judge temperature.',
+        example:'A parent bundles baby into a thick snowsuit for a five-minute drive and forgets to remove it once inside a warm shop, where baby quickly becomes overheated.',
+        tip:'Choose layers you can easily add or remove in a doorway, rather than one thick all-in-one that\'s hard to adjust on the move.' },
+
+      { id:'newborn66', num:'N66', risk:'medium', title:'Pram & Pushchair Handle Safety — No Hanging Bags',
+        who:'Caregivers using a pram or pushchair',
+        what:'Hanging heavy bags on the handles, risking the pram tipping backwards with baby inside',
+        where:'Wherever the pram is used',
+        why:'Prams are balanced for the baby\'s weight, and extra weight on the handles can make them unstable, especially lightweight lie-flat newborn prams.',
+        how:'Use the pram\'s under-seat basket, or a bag designed to attach at the correct point, rather than hanging bags directly from the handles, and always engage the brake fully whenever the pram is stationary.',
+        measurement:'Keep to the manufacturer\'s maximum recommended basket or attachment weight.',
+        example:'A heavy changing bag hung from the handles tips a lightweight pram backwards when left briefly on a slope; the family switches to using the under-seat basket instead.',
+        tip:'If the pram feels front-light or unstable when you let go of the handles, that\'s a sign the load needs redistributing.' },
+
+      { id:'newborn67', num:'N67', risk:'medium', title:'Pram or Car-Seat Harness Use Every Time',
+        who:'Caregivers placing a newborn in a pram or an attached car-seat unit',
+        what:'Not securing the pram\'s own harness because "the mattress keeps them in place"',
+        where:'Every outing, however short',
+        why:'Even a fully reclined newborn can shift position, so the pram or carrycot\'s own restraint, where fitted, adds a layer of protection, and any attached car seat must always be harnessed regardless of the trip length.',
+        how:'Use whatever restraint the pram or carrycot manufacturer provides, and always harness a car seat clipped onto a pushchair frame exactly as you would inside the car itself.',
+        measurement:'Harness used on every outing, with no exceptions for short trips.',
+        example:'A parent skips the harness "just for a quick trip round the block"; a relative gently points out that the habit matters more than the length of any single trip.',
+        tip:'Make harnessing part of the same automatic sequence as putting shoes on to leave the house.' },
+
+      { id:'newborn68', num:'N68', risk:'medium', title:'Journey Length Limits in a Car Seat',
+        who:'Parents planning car journeys with a newborn',
+        what:'Very long continuous periods in a semi-reclined car seat',
+        where:'On longer car journeys',
+        why:'Extended time in the same position, especially semi-upright, is linked to breathing and postural concerns in young babies, so regular breaks matter.',
+        how:'Plan breaks roughly every 2 hours on longer journeys to take baby out of the seat and change position, and avoid using the car seat as the default resting or sleeping place once you\'re home.',
+        measurement:'Breaks approximately every 2 hours of continuous car-seat time on longer journeys.',
+        example:'A family driving several hours to visit relatives builds in two stops specifically to take baby out of the car seat, rather than driving straight through.',
+        tip:'Plan stops around baby\'s feeding times where possible, so the break serves two purposes at once.' },
+
+      { id:'newborn69', num:'N69', risk:'high', title:'Infection Control Before Routine Vaccinations Begin',
+        who:'Caregivers taking a newborn into busy public places in the first weeks',
+        what:'Extended time in crowded indoor spaces before the first round of routine vaccinations',
+        where:'Crowded indoor public places',
+        why:'A newborn\'s immune system is still immature and hasn\'t yet had the protection of the first scheduled vaccines, typically due around 8 weeks, so reducing exposure to crowds and visibly unwell people in the earliest weeks lowers infection risk.',
+        how:'Choose quieter times for essential outings, ask visibly unwell visitors or bystanders to keep their distance where possible, and prioritise handwashing for anyone holding baby. This caution eases as the weeks pass and vaccinations begin.',
+        measurement:'Extra caution advised through roughly the first 6–8 weeks of life.',
+        example:'A family delays a large, crowded family gathering by a couple of weeks until baby is a little older, choosing smaller, quieter visits in the meantime.',
+        tip:'Quieter times of day at familiar, less crowded places are an easy way to still get outside without unnecessary exposure.' },
+
+      { id:'newborn70', num:'N70', risk:'low', title:'Emergency ID & Information for Outings',
+        who:'Caregivers taking a newborn out of the home',
+        what:'No accessible information about baby, allergies, or an emergency contact if something happens away from home',
+        where:'In the changing bag on every outing',
+        why:'In the first weeks a newborn cannot be identified or speak for themselves, so having key information accessible saves time in an emergency.',
+        how:'Keep a card or phone note with baby\'s name, date of birth, any medical notes, and emergency contacts — the same details saved in your personalised cheat sheet — and carry it in the changing bag on every outing.',
+        measurement:'Information accessible within seconds by any caregiver.',
+        example:'A grandparent taking baby out alone for the first time is glad to find a simple info card already in the changing bag, in case anyone needs to reach the parents quickly.',
+        tip:'Keep a duplicate of this information in the cheat sheet in this app, so it\'s always in two places at once.' }
+    ]
+  },
+  {
+    id: 6, name: 'Household, Visitors & Caregiver Wellbeing', icon: '🏠',
+    desc: '14 checks covering visitor infection control, safe handling and handover, shaken-baby awareness, and caregiver wellbeing in the exhausting first weeks.',
+    checks: [
+      { id:'newborn71', num:'N71', risk:'high', title:'Visitor Infection Control in the First Weeks',
+        who:'Families welcoming visitors to meet a newborn',
+        what:'Allowing visitors who are unwell, or skipping hand hygiene before someone holds baby',
+        where:'Anywhere visitors meet the newborn',
+        why:'A newborn\'s immune system offers little protection against common infections that are mild for adults but can be serious for a baby this young.',
+        how:'Ask all visitors to wash their hands before holding baby, postpone visits from anyone with cold, flu, stomach symptoms, or cold sores, and remember it\'s completely reasonable to say no to visitors altogether in the first weeks.',
+        measurement:'Hand hygiene before every hold; symptomatic visitors postponed until well.',
+        example:'A relative with a cold offers to hold the newborn "just for a minute"; the parents kindly ask them to wait until they\'re feeling better instead.',
+        tip:'Keep hand sanitiser by the front door so hand hygiene becomes the very first thing every visitor does.' },
+
+      { id:'newborn72', num:'N72', risk:'critical', title:'Safe Handling — Head & Neck Support Every Time',
+        who:'Anyone picking up, carrying, or handing over a newborn',
+        what:'Not fully supporting the head and neck during lifting, carrying, or handover',
+        where:'Anywhere baby is picked up or carried',
+        why:'A newborn cannot yet control their own head, so unsupported movement risks strain or injury and can be distressing for baby.',
+        how:'Always support the head and neck with one hand or forearm while lifting, keep baby\'s body close and supported when carrying, and brief anyone unfamiliar — older siblings, first-time helpers — on head support before they hold baby.',
+        measurement:'Head and neck supported for 100% of lifts and holds until baby has full head control, commonly around 3–4 months.',
+        example:'An excited older sibling wants to pick baby up unaided; a parent shows them how to support the head first and supervises closely.',
+        tip:'Show, don\'t just tell — a two-minute hands-on demonstration sticks far better than a verbal instruction alone.' },
+
+      { id:'newborn73', num:'N73', risk:'critical', title:'Coping With Crying — Shaken Baby Syndrome Awareness',
+        who:'Every caregiver who will spend time alone with a newborn',
+        what:'Shaking a crying baby out of frustration or exhaustion',
+        where:'Anywhere, at any time',
+        why:'A newborn\'s brain and neck muscles are especially vulnerable — even a few seconds of shaking can cause severe, permanent brain injury or death — and inconsolable crying peaks in exactly this age window.',
+        how:'If crying becomes overwhelming, place baby safely on their back in the crib and step into another room for a few minutes to calm down. Ask for relief from another adult, and remember that crying alone in a safe space is always safer than a caregiver reaching breaking point while holding baby.',
+        measurement:'Zero shaking, ever, regardless of provocation; the safe-place pause is taught to every caregiver.',
+        example:'An exhausted parent feels their frustration rising during a long crying spell; they place baby safely in the crib, step into the hallway for two minutes, and return calmer.',
+        tip:'Talk about this plan with every caregiver before it\'s ever needed — it\'s much easier to use a plan you\'ve already agreed on than to invent one in the moment.' },
+
+      { id:'newborn74', num:'N74', risk:'high', title:'Introducing a Newborn to Older Siblings & Pets',
+        who:'Families with other children or pets at home',
+        what:'Unsupervised contact between a newborn and an excited sibling or curious pet',
+        where:'Anywhere siblings or pets are near the newborn',
+        why:'Even a gentle sibling or a calm pet can cause injury through sudden movement, jealousy, or simple unfamiliarity with the newborn\'s fragility.',
+        how:'Always supervise directly, let a pet approach and sniff calmly rather than forcing contact, teach siblings to touch gently with a supported hand, and never leave a pet or young sibling alone with a newborn even for a moment.',
+        measurement:'100% direct adult supervision for all sibling and pet interactions with the newborn.',
+        example:'A usually calm family dog is kept on a lead for the first introductions to the newborn, allowed to sniff gently under close supervision rather than free access straight away.',
+        tip:'Give an older sibling a specific gentle job, like stroking baby\'s foot under supervision, so their enthusiasm has a safe outlet.' },
+
+      { id:'newborn75', num:'N75', risk:'medium', title:'Household Hazards for an Exhausted New Caregiver',
+        who:'Sleep-deprived parents and caregivers in the first weeks',
+        what:'Carrying hot drinks and baby at the same time on stairs, or other fatigue-related household risks',
+        where:'Throughout the home',
+        why:'Sleep deprivation slows reaction time and judgement in a way similar to alcohol, so ordinary household tasks carry more risk in the newborn weeks than usual.',
+        how:'Put hot drinks down before picking baby up, hold the stair rail, ask for help with tasks rather than multitasking while exhausted, and keep floors clear of trip hazards created by new baby equipment.',
+        measurement:'No hot drinks carried at the same time as baby; stair rail used whenever fatigued.',
+        example:'An exhausted parent starts to carry both a hot coffee and the baby down the stairs; a partner offers to carry one or the other instead.',
+        tip:'Set hot drinks down on a stable surface the moment baby needs picking up — make it an automatic reflex, not a decision each time.' },
+
+      { id:'newborn76', num:'N76', risk:'medium', title:'Safe Handover Between Caregivers',
+        who:'Parents handing a newborn to a new babysitter, relative, or childcare helper',
+        what:'Incomplete handover information leading to unsafe choices by an unfamiliar carer',
+        where:'Wherever care is handed over',
+        why:'Someone new to the baby needs the same safe-sleep, feeding, and emergency information the parents use every day.',
+        how:'Brief every new caregiver on back-to-sleep, feeding schedule and method, any allergy or medical notes, and emergency contacts before you leave — and write it down as well as saying it.',
+        measurement:'A written handover note is prepared for any carer who hasn\'t cared for this baby before.',
+        example:'A grandparent babysitting for the first time is given a short written note covering feeding times, safe sleep position, and emergency numbers, alongside the verbal explanation.',
+        tip:'Keep a template handover note ready to fill in quickly, rather than writing it fresh under time pressure each time.' },
+
+      { id:'newborn77', num:'N77', risk:'critical', title:'Postnatal Mental Health — Baby Blues vs Something More',
+        who:'Birthing parents and their partners or support network',
+        what:'Dismissing low mood, anxiety, or intrusive thoughts as something to just push through',
+        where:'Anywhere, at any time in the first weeks and beyond',
+        why:'"Baby blues" — brief low mood and tearfulness — are common in the first two weeks and usually pass, but symptoms that are severe, persist beyond two weeks, or include thoughts of harm need prompt professional support; postnatal depression and anxiety are common and treatable.',
+        how:'Talk openly with your midwife, health visitor, or doctor at every check, don\'t wait for it to "just lift" if something feels wrong, and seek urgent help immediately for any thoughts of harming yourself or the baby.',
+        measurement:'Any low mood or anxiety persisting beyond 2 weeks, or any severity at any time, warrants a conversation with a health professional.',
+        example:'A new mother feels persistently low and anxious well beyond the first fortnight; her partner encourages her to raise it at the next check rather than waiting for it to pass on its own.',
+        tip:'Involve a partner or trusted person in noticing changes too — it\'s often easier for someone else to spot when things have gone beyond "normal" tiredness.' },
+
+      { id:'newborn78', num:'N78', risk:'high', title:'Whole-Home Safety Check for a New Arrival',
+        who:'Parents preparing the home in the newborn weeks',
+        what:'Assuming baby-proofing can wait until baby is mobile',
+        where:'Throughout the home',
+        why:'Smoke alarms, locked medicines and cleaning products, and a general safety sweep matter from day one — visitors, siblings, and the sheer amount of new equipment change the household risk picture immediately.',
+        how:'Test smoke alarms, lock medicines and cleaning products away, check new baby equipment for any recall notices, and keep the newborn\'s immediate sleep and feeding area free of clutter and cables.',
+        measurement:'Smoke alarms tested and medicines/cleaning products locked away from day one; child-resistant packaging to a recognised standard such as ISO 8317 is a helpful feature to look for even at this stage.',
+        example:'A family does a quick smoke-alarm test and locks away cleaning products under the sink in the week before the birth, rather than waiting until baby starts crawling.',
+        tip:'Do a simple room-by-room sweep before the birth — it\'s far easier with an empty pair of hands than once you\'re also holding a newborn.' },
+
+      { id:'newborn79', num:'N79', risk:'medium', title:'Kangaroo / Skin-to-Skin Care for Temperature & Bonding',
+        who:'Parents of any newborn, especially premature or low-birth-weight babies',
+        what:'Underusing skin-to-skin contact as a genuine thermoregulation and bonding tool',
+        where:'At home, while awake and supervised',
+        why:'Skin-to-skin contact helps stabilise a newborn\'s temperature, heart rate, and breathing, and supports feeding and bonding — it is especially valuable for premature or low-birth-weight babies.',
+        how:'Do skin-to-skin while awake and seated upright or safely reclined (see Zone 1 for the safe-sleep boundaries around this), as often as both baby and parent want it in the early weeks.',
+        measurement:'Encouraged daily where practical, always while awake and supervised.',
+        example:'A father makes skin-to-skin time part of the evening routine, sitting upright and alert while doing it, rather than lying back and risking drowsiness.',
+        tip:'Pair skin-to-skin time with something that keeps you alert, like watching something engaging, rather than doing it right before you\'d normally fall asleep.' },
+
+      { id:'newborn80', num:'N80', risk:'critical', title:'The Sofa/Armchair Falling-Asleep Trap',
+        who:'Any exhausted caregiver feeding or settling a newborn',
+        what:'Falling asleep with baby on a sofa or in an armchair during night feeds',
+        where:'Living room or any soft seating used for night feeds',
+        why:'This specific situation — an adult falling asleep with baby on a soft, cushioned surface with gaps and cushions nearby — carries a notably higher risk than almost any other newborn sleep scenario.',
+        how:'If you feel yourself getting sleepy while feeding on the sofa, get up and move to the bedroom. Use the safest option available — baby back in the crib, or if bringing baby to bed, remove pillows and duvet from that immediate area — rather than continuing on the sofa.',
+        measurement:'Zero planned or accidental sofa/armchair co-sleeping.',
+        example:'A parent catches themselves nodding off mid-feed on the sofa at 4am and gets up immediately to move to the bedroom rather than risking dozing off there.',
+        tip:'If night feeds regularly happen on the sofa, set a loud alarm as a backup the moment you sit down, every single time.' },
+
+      { id:'newborn81', num:'N81', risk:'medium', title:'Newborn Identity Security From Discharge Onward',
+        who:'Parents bringing a newborn home from a birth setting',
+        what:'Losing track of identification bands, or having no system to confirm baby\'s identity with new carers',
+        where:'At discharge and with any new carer afterwards',
+        why:'Correct identification matters in busy birth settings, and keeping this habit going supports safe identification with any new carer — childcare or emergency care — later on.',
+        how:'Check ID bands match before leaving any care setting, keep a note of baby\'s full details for any new carer or emergency situation, and know your own baby\'s markers such as birthmarks or a footprint record if one was provided.',
+        measurement:'ID checked at every discharge or transfer point in a care setting.',
+        example:'Parents double-check the ID bands match before leaving the birth unit, a habit that carries over naturally into checking details with any new carer afterwards.',
+        tip:'Photograph any hospital ID band or footprint record before it\'s removed, as a simple keepsake and reference.' },
+
+      { id:'newborn82', num:'N82', risk:'high', title:'Choosing Safe Additional Help in the Newborn Period',
+        who:'Parents arranging a postpartum doula, night helper, or extra household support',
+        what:'Engaging unvetted help without checking references or basic safe-sleep and handling knowledge',
+        where:'Anywhere additional help is used in the home',
+        why:'Extra help can be invaluable for recovery and rest, but anyone caring for a newborn should be able to demonstrate safe sleep, feeding, and handling knowledge.',
+        how:'Check references and any relevant background checks, brief them exactly as you would any new caregiver — see the handover check — and trust your own judgement if something feels wrong.',
+        measurement:'References checked before unsupervised care begins.',
+        example:'A family hiring overnight help checks references thoroughly and gives the same written handover note used for family babysitters.',
+        tip:'A short paid trial visit while you\'re still in the house can be a low-pressure way to see how someone new handles baby before leaving them unsupervised.' },
+
+      { id:'newborn83', num:'N83', risk:'high', title:'Know When and How to Get Emergency Help Fast',
+        who:'Every caregiver of a newborn',
+        what:'Hesitating to seek emergency help, or not knowing who to call, in a genuine emergency',
+        where:'Anywhere, at any time',
+        why:'In the newborn period, situations can escalate quickly, and confidently knowing your emergency route saves critical time.',
+        how:'Save your local emergency number and health advice line in your phone and in the printed cheat sheet, know the fastest route to your nearest emergency department, and don\'t hesitate to call for any of the red-flag signs covered in Zone 4.',
+        measurement:'Emergency contacts saved in your phone AND on the printed, personalised cheat sheet.',
+        example:'A parent unsure whether a symptom is urgent calls the health advice line saved in their cheat sheet rather than waiting to see if it passes.',
+        tip:'Fill in your cheat sheet contacts today, even before you think you\'ll need them — it takes minutes now and saves precious time later.' },
+
+      { id:'newborn84', num:'N84', risk:'high', title:'Caregiver Sleep Deprivation — Your Own Safety Matters Too',
+        who:'Parents and caregivers in the exhausting newborn weeks',
+        what:'Driving, operating machinery, or making safety decisions while severely sleep-deprived',
+        where:'Anywhere caregiver alertness is required',
+        why:'Newborn-stage sleep deprivation can impair judgement and reaction time comparably to alcohol intoxication, affecting both caregiver safety and the quality of care given.',
+        how:'Avoid driving when severely sleep-deprived, share night duties where possible, accept practical help, and treat your own rest as part of baby\'s safety plan, not a luxury.',
+        measurement:'No driving when you would fail a basic alertness self-check — heavy eyelids, missed exits, or drifting attention.',
+        example:'A father recognises he\'s too exhausted to drive safely after several broken nights and asks a partner to take the wheel for a planned trip instead.',
+        tip:'Treat "I\'m too tired to drive safely" as valid a reason to ask for help as any physical illness would be.' }
+    ]
+  }
+];
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+const STORE_KEY = 'safelife-newborn-pro';
+const completed = new Set();
+let lang = 'en', theme = 'sky', mode = 'light', riskFilter = null, activeZone = 1;
+const TOTAL = 84;
+
+function t(key){ return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key; }
+function persist(){
+  try{ localStorage.setItem(STORE_KEY, JSON.stringify({completed:[...completed], lang, theme, mode})); }catch(e){}
+}
+function restore(){
+  try{
+    const raw = localStorage.getItem(STORE_KEY);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    (d.completed||[]).forEach(id=>completed.add(id));
+    if(false && d.lang && I18N[d.lang]) lang = d.lang; /* language switching disabled for English-only release — remove "false &&" to re-enable */
+    if(d.theme) theme = d.theme;
+    if(d.mode) mode = d.mode;
+  }catch(e){}
+}
+
+// ═══════════════════════════════════════════
+// PROGRESS & STATS
+// ═══════════════════════════════════════════
+function updateProgress(){
+  const done = completed.size;
+  document.getElementById('topbar-done').textContent = done;
+  document.getElementById('progress-count').textContent = done + ' ' + t('ofWord') + ' ' + TOTAL;
+  document.getElementById('progress-fill').style.width = (done/TOTAL*100) + '%';
+  ZONES.forEach(z=>{
+    const zDone = z.checks.filter(c=>completed.has(c.id)).length;
+    document.getElementById('ztc-'+z.id).textContent = zDone + '/14';
+  });
+  document.getElementById('celebrate').classList.toggle('show', done === TOTAL);
+  persist();
+}
+function fillStats(){
+  const counts = {critical:0,high:0,medium:0,low:0};
+  ZONES.forEach(z=>z.checks.forEach(c=>counts[c.risk]++));
+  ['critical','high','medium','low'].forEach(r=>{ document.getElementById('s-'+r).textContent = counts[r]; });
+}
+
+// ═══════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════
+function buildCard(check){
+  const card = document.createElement('div');
+  card.className = 'check-card' + (completed.has(check.id) ? ' completed' : '');
+  card.dataset.id = check.id;
+  card.dataset.risk = check.risk;
+  card.innerHTML =
+    '<div class="check-header">' +
+      '<div class="check-checkbox">' + (completed.has(check.id) ? '✓' : '') + '</div>' +
+      '<div class="check-num">' + check.num + '</div>' +
+      '<div class="check-risk risk-' + check.risk + '">' + t(check.risk) + '</div>' +
+      '<div class="check-title">' + check.title + '</div>' +
+      '<div class="check-chevron">▼</div>' +
+    '</div>' +
+    '<div class="check-detail">' +
+      '<div class="detail-grid">' +
+        '<div class="detail-item"><div class="detail-label"><span>👤</span>' + t('who') + '</div><div class="detail-value">' + check.who + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>⚠️</span>' + t('what') + '</div><div class="detail-value">' + check.what + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>📍</span>' + t('where') + '</div><div class="detail-value">' + check.where + '</div></div>' +
+        '<div class="detail-item"><div class="detail-label"><span>❓</span>' + t('why') + '</div><div class="detail-value">' + check.why + '</div></div>' +
+        '<div class="detail-item full"><div class="detail-label"><span>🔧</span>' + t('how') + '</div><div class="detail-value">' + check.how + '</div></div>' +
+      '</div>' +
+      '<div class="measurement-box"><strong>📏 ' + t('standards') + '</strong>' + check.measurement + '</div>' +
+      '<div class="detail-item full" style="margin-top:10px;"><div class="detail-label"><span>💬</span>' + t('example') + '</div><div class="detail-value">' + check.example + '</div></div>' +
+      '<div class="tip-box"><span class="tip-icon">💡</span><span class="tip-text"><strong>' + t('quickTip') + ':</strong> ' + check.tip + '</span></div>' +
+    '</div>';
+  card.querySelector('.check-header').addEventListener('click', function(){ card.classList.toggle('open'); });
+  card.querySelector('.check-checkbox').addEventListener('click', function(e){
+    e.stopPropagation();
+    if(completed.has(check.id)){ completed.delete(check.id); card.classList.remove('completed'); this.textContent=''; }
+    else { completed.add(check.id); card.classList.add('completed'); this.textContent='✓'; }
+    updateProgress();
+  });
+  return card;
+}
+
+function renderAll(){
+  document.querySelectorAll('.zone-panel').forEach(p=>p.remove());
+  const main = document.getElementById('main-content');
+  ZONES.forEach(z=>{
+    const panel = document.createElement('div');
+    panel.className = 'zone-panel' + (z.id === activeZone ? ' active' : '');
+    panel.id = 'zone-panel-' + z.id;
+    const header = document.createElement('div');
+    header.className = 'zone-header';
+    header.innerHTML = '<div class="zone-icon">' + (ICONS['z'+z.id] || z.icon) + '</div><div class="zone-header-text"><h2>' + t('z'+z.id) + '</h2><p>' + t('zd'+z.id) + '</p></div>';
+    panel.appendChild(header);
+    const actions = document.createElement('div');
+    actions.className = 'zone-actions';
+    const bExpand = document.createElement('button'); bExpand.className='btn btn-outline'; bExpand.textContent=t('expandAll');
+    const bCollapse = document.createElement('button'); bCollapse.className='btn btn-outline'; bCollapse.textContent=t('collapseAll');
+    const bUnmark = document.createElement('button'); bUnmark.className='btn btn-outline'; bUnmark.textContent=t('unmarkAll');
+    const bMark = document.createElement('button'); bMark.className='btn btn-primary'; bMark.textContent=t('markAll');
+    actions.append(bExpand,bCollapse,bUnmark,bMark);
+    panel.appendChild(actions);
+    const list = document.createElement('div');
+    list.className = 'checks-list';
+    z.checks.forEach(c=>list.appendChild(buildCard(c)));
+    panel.appendChild(list);
+    const disc = document.createElement('div');
+    disc.className = 'zone-disclaimer';
+    disc.textContent = '⚕ ' + t('disclaimer');
+    panel.appendChild(disc);
+    bExpand.addEventListener('click', ()=>list.querySelectorAll('.check-card').forEach(c=>c.classList.add('open')));
+    bCollapse.addEventListener('click', ()=>list.querySelectorAll('.check-card').forEach(c=>c.classList.remove('open')));
+    bMark.addEventListener('click', ()=>{ z.checks.forEach(c=>completed.add(c.id)); refreshCards(list); });
+    bUnmark.addEventListener('click', ()=>{ z.checks.forEach(c=>completed.delete(c.id)); refreshCards(list); });
+    main.appendChild(panel);
+  });
+  applyFilters();
+  updateProgress();
+}
+function refreshCards(list){
+  list.querySelectorAll('.check-card').forEach(card=>{
+    const done = completed.has(card.dataset.id);
+    card.classList.toggle('completed', done);
+    card.querySelector('.check-checkbox').textContent = done ? '✓' : '';
+  });
+  updateProgress();
+}
+
+// ═══════════════════════════════════════════
+// ZONES / SEARCH / FILTERS
+// ═══════════════════════════════════════════
+function switchZone(id){
+  activeZone = id;
+  document.querySelectorAll('.zone-tab').forEach(tab=>tab.classList.toggle('active', +tab.dataset.zone === id));
+  document.querySelectorAll('.zone-panel').forEach(p=>p.classList.toggle('active', p.id === 'zone-panel-' + id));
+}
+document.querySelectorAll('.zone-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{ document.getElementById('search-input').value=''; applyFilters(); switchZone(+tab.dataset.zone); });
+});
+document.querySelectorAll('.hero-badge[data-zone]').forEach(badge=>{
+  badge.addEventListener('click', ()=>{
+    switchZone(+badge.dataset.zone);
+    document.getElementById('zone-tabs').scrollIntoView({behavior:'smooth'});
+  });
+});
+document.querySelectorAll('.stat-pill[data-risk]').forEach(pill=>{
+  pill.addEventListener('click', ()=>{
+    riskFilter = (riskFilter === pill.dataset.risk) ? null : pill.dataset.risk;
+    document.querySelectorAll('.stat-pill[data-risk]').forEach(p=>p.classList.toggle('filter-on', p.dataset.risk === riskFilter));
+    applyFilters();
+  });
+});
+document.getElementById('search-input').addEventListener('input', applyFilters);
+
+function applyFilters(){
+  const q = document.getElementById('search-input').value.trim().toLowerCase();
+  const searching = q.length > 0;
+  let anyVisible = false;
+  ZONES.forEach(z=>{
+    const panel = document.getElementById('zone-panel-' + z.id);
+    if(!panel) return;
+    let zoneVisible = 0;
+    panel.querySelectorAll('.check-card').forEach(card=>{
+      const check = z.checks.find(c=>c.id === card.dataset.id);
+      const text = (check.title+' '+check.who+' '+check.what+' '+check.where+' '+check.why+' '+check.how+' '+check.measurement+' '+check.example+' '+check.tip).toLowerCase();
+      const matchQ = !searching || text.includes(q);
+      const matchR = !riskFilter || check.risk === riskFilter;
+      const show = matchQ && matchR;
+      card.style.display = show ? '' : 'none';
+      if(show) zoneVisible++;
+    });
+    if(searching || riskFilter){
+      panel.classList.toggle('active', zoneVisible > 0);
+      panel.querySelector('.zone-actions').style.display = 'none';
+    } else {
+      panel.classList.toggle('active', z.id === activeZone);
+      panel.querySelector('.zone-actions').style.display = '';
+    }
+    if(zoneVisible > 0) anyVisible = true;
+  });
+  document.getElementById('search-no-results').style.display = (searching || riskFilter) && !anyVisible ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════
+// THEMES / MODE / LANGUAGE
+// ═══════════════════════════════════════════
+const THEMES = [
+  {id:'sky',    name:'Newborn Sky',  c:'#0EA5E9'},
+  {id:'amber',  name:'Warm Amber',    c:'#F59E0B'},
+  {id:'teal',   name:'Teal Calm',     c:'#14B8A6'},
+  {id:'rose',   name:'Rose Care',     c:'#E11D48'},
+  {id:'violet', name:'Gentle Violet', c:'#7C3AED'},
+  {id:'ocean',  name:'Ocean Blue',    c:'#2563EB'},
+  {id:'forest', name:'Forest Green',  c:'#16A34A'}
+];
+function buildThemeMenu(){
+  const dd = document.getElementById('dd-theme');
+  dd.innerHTML = '<div class="dropdown-title">' + t('theme') + '</div>';
+  THEMES.forEach(th=>{
+    const row = document.createElement('button');
+    row.className = 'theme-row' + (th.id === theme ? ' selected' : '');
+    row.innerHTML = '<span class="theme-swatch" style="background:' + th.c + '"></span>' + th.name + (th.id === theme ? '<span class="check-mark">✓</span>' : '');
+    row.addEventListener('click', e=>{
+      e.stopPropagation();
+      theme = th.id;
+      document.body.dataset.theme = theme;
+      buildThemeMenu(); persist();
+    });
+    dd.appendChild(row);
+  });
+}
+function buildLangMenu(){
+  const dd = document.getElementById('dd-lang');
+  dd.innerHTML = '<div class="dropdown-title">🌐 Language</div>';
+  Object.keys(I18N).forEach(code=>{
+    const row = document.createElement('button');
+    row.className = 'theme-row' + (code === lang ? ' selected' : '');
+    row.innerHTML = '<span style="font-weight:800;font-size:11px;color:var(--accent);min-width:22px;">' + code.toUpperCase() + '</span>' + I18N[code].name + (code === lang ? '<span class="check-mark">✓</span>' : '');
+    row.addEventListener('click', e=>{
+      e.stopPropagation();
+      lang = code;
+      applyLang(); renderAll(); buildLangMenu(); buildManual(); buildCheat(); buildCollection(); persist();
+    });
+    dd.appendChild(row);
+  });
+  const note = document.createElement('div');
+  note.style.cssText = 'font-size:10.5px;color:var(--ink-soft);padding:8px;max-width:230px;line-height:1.4;';
+  note.textContent = t('langNote');
+  dd.appendChild(note);
+}
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.innerHTML = t(el.dataset.i18n); });
+  document.getElementById('search-input').placeholder = t('searchPh');
+  document.getElementById('lang-label').textContent = lang.toUpperCase();
+  document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+}
+function toggleDropdown(id, e){
+  e.stopPropagation();
+  const dd = document.getElementById(id);
+  const wasOpen = dd.classList.contains('open');
+  document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open'));
+  if(!wasOpen) dd.classList.add('open');
+}
+document.getElementById('btn-theme').addEventListener('click', e=>toggleDropdown('dd-theme', e));
+document.getElementById('btn-lang').addEventListener('click', e=>toggleDropdown('dd-lang', e));
+document.addEventListener('click', ()=>document.querySelectorAll('.dropdown').forEach(d=>d.classList.remove('open')));
+document.getElementById('btn-mode').addEventListener('click', function(){
+  mode = mode === 'light' ? 'dark' : 'light';
+  document.body.dataset.mode = mode;
+  this.textContent = mode === 'light' ? '🌙' : '☀️';
+  persist();
+});
+
+// ═══════════════════════════════════════════
+// SAVE / LOAD PROGRESS
+// ═══════════════════════════════════════════
+document.getElementById('btn-save').addEventListener('click', ()=>{
+  const data = { product:'SafeLife', module:'newborn-0-28days', version:1, savedAt:new Date().toISOString(), completed:[...completed], lang, theme, mode };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'SafeLife_Newborn_Progress_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById('btn-load').addEventListener('click', ()=>document.getElementById('load-file').click());
+document.getElementById('load-file').addEventListener('change', function(){
+  const file = this.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{
+      const d = JSON.parse(reader.result);
+      if(d.module !== 'newborn-0-28days' && !confirm('This file was saved from a different module. Load anyway?')) return;
+      completed.clear();
+      (d.completed||[]).forEach(id=>completed.add(id));
+      if(false && d.lang && I18N[d.lang]) lang = d.lang; /* language switching disabled for English-only release — remove "false &&" to re-enable */
+      if(d.theme) theme = d.theme;
+      if(d.mode) mode = d.mode;
+      document.body.dataset.theme = theme;
+      document.body.dataset.mode = mode;
+      document.getElementById('btn-mode').textContent = mode === 'light' ? '🌙' : '☀️';
+      applyLang(); renderAll(); buildThemeMenu(); buildLangMenu(); persist();
+    }catch(e){ alert('Could not read that file — is it a SafeLife progress file?'); }
+  };
+  reader.readAsText(file);
+  this.value = '';
+});
+
+// ═══════════════════════════════════════════
+// MODALS / PRINT / NAV
+// ═══════════════════════════════════════════
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-close').forEach(b=>b.addEventListener('click', ()=>closeModal(b.dataset.close)));
+document.querySelectorAll('.modal-overlay').forEach(o=>o.addEventListener('click', e=>{ if(e.target === o) o.classList.remove('open'); }));
+document.getElementById('btn-manual').addEventListener('click', ()=>openModal('modal-manual'));
+document.getElementById('btn-cheat').addEventListener('click', ()=>openModal('modal-cheat'));
+document.getElementById('btn-print').addEventListener('click', ()=>openModal('modal-print'));
+document.getElementById('btn-search').addEventListener('click', ()=>{
+  const s = document.getElementById('search-input');
+  s.scrollIntoView({behavior:'smooth', block:'center'});
+  setTimeout(()=>s.focus(), 350);
+});
+
+function doPrint(cls){
+  document.querySelectorAll('.modal-overlay').forEach(o=>o.classList.remove('open'));
+  const wasOpen = new Set([...document.querySelectorAll('.check-card.open')]);
+  document.querySelectorAll('.check-card').forEach(c=>c.classList.add('open'));
+  if(cls) document.body.classList.add(cls);
+  const cleanup = ()=>{
+    document.body.classList.remove('print-zone','print-cheat');
+    document.querySelectorAll('.check-card').forEach(c=>{ if(!wasOpen.has(c)) c.classList.remove('open'); });
+    window.removeEventListener('afterprint', cleanup);
+  };
+  window.addEventListener('afterprint', cleanup);
+  setTimeout(()=>window.print(), 60);
+}
+document.getElementById('print-all').addEventListener('click', ()=>doPrint(null));
+document.getElementById('print-zone').addEventListener('click', ()=>doPrint('print-zone'));
+document.getElementById('print-cheat2').addEventListener('click', ()=>doPrint('print-cheat'));
+document.getElementById('btn-print-cheat').addEventListener('click', ()=>doPrint('print-cheat'));
+
+function visibleCards(){
+  return [...document.querySelectorAll('.zone-panel.active .check-card')].filter(c=>c.style.display !== 'none');
+}
+function nearestCardIx(cards){
+  const mark = window.innerHeight * 0.35;
+  let best = 0, bestDist = Infinity;
+  cards.forEach((c, i)=>{
+    const d = Math.abs(c.getBoundingClientRect().top - mark);
+    if(d < bestDist){ bestDist = d; best = i; }
+  });
+  return best;
+}
+function goToCard(cards, ix){
+  if(ix < 0){ window.scrollTo({top:0, behavior:'smooth'}); return; }
+  if(ix > cards.length - 1) ix = cards.length - 1;
+  const y = cards[ix].getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35;
+  window.scrollTo({top: Math.max(0, y), behavior:'smooth'});
+}
+document.getElementById('fn-top').addEventListener('click', ()=>window.scrollTo({top:0, behavior:'smooth'}));
+document.getElementById('fn-next').addEventListener('click', ()=>{
+  const cards = visibleCards(); if(!cards.length) return;
+  goToCard(cards, nearestCardIx(cards) + 1);
+});
+document.getElementById('fn-prev').addEventListener('click', ()=>{
+  const cards = visibleCards(); if(!cards.length) return;
+  goToCard(cards, nearestCardIx(cards) - 1);
+});
+
+// ═══════════════════════════════════════════
+// MANUAL / CHEAT SHEET / COLLECTION
+// ═══════════════════════════════════════════
+function buildManual(){
+  document.getElementById('manual-body').innerHTML =
+    t('manualBody') +
+    '<h4>⚕</h4><p>' + t('disclaimer') + ' ' + t('langNote') + '</p>';
+}
+
+const GOLDEN_RULES = [
+  'Back to sleep, every single sleep, from day one',
+  'Room-share without bed-sharing — never on a sofa or armchair',
+  'Room 16–20°C (61–68°F) — a newborn cannot yet shiver to warm up',
+  'Bath water 37–38°C (98.6–100.4°F), tested before every bath',
+  'Fever ≥38°C (100.4°F) in the first 28 days is a same-day emergency',
+  'Cord stump dry and exposed to air until it separates on its own',
+  'Never leave a newborn alone in or next to water, even for seconds',
+  'Never shake a baby — place them safely down and step away to calm down',
+  'Rear-facing car seat from birth (UN R129), harness pinch-tested every trip',
+  'Head and neck supported on every single lift, carry, and handover'
+];
+const KEY_NUMBERS = [
+  ['Normal temperature','36.5–37.5°C (97.7–99.5°F) axillary'],
+  ['Fever emergency (0–28 days)','≥38°C (100.4°F) = urgent same-day review'],
+  ['Room temperature','16–20°C (61–68°F)'],
+  ['Bath water','37–38°C (98.6–100.4°F)'],
+  ['Formula mixing water','≥70°C (158°F) before cooling to feed'],
+  ['Weight-loss threshold','up to ~7–10% from birth weight; regain by 10–14 days'],
+  ['Feeding frequency','8–12 feeds per 24 hours'],
+  ['Jaundice peak window','day 3–5; first-24-hour jaundice is urgent'],
+  ['Cord stump separation','typically 7–21 days'],
+  ['Sleep bag/cot mattress gap','≤2 finger-widths (~25mm/1in) at every edge'],
+  ['Car seat standard','UN R129 (i-Size), rear-facing from birth'],
+  ['Infant CPR compressions','approx. one-third chest depth, 100–120/min'],
+  ['Vitamin D (breastfed)','~8.5–10µg (340–400 IU) daily'],
+  ['Newborn sleep needs','14–17 hours per 24 hours, in short cycles']
+];
+
+const CONTACTS_KEY = 'safelife-newborn-contacts';
+const DEFAULT_CONTACTS = [
+  ['Emergency services',''],
+  ['Health advice line',''],
+  ['Midwife / health visitor',''],
+  ['Paediatrician / family doctor',''],
+  ['Poisons information centre',''],
+  ['Crisis / mental-health line',''],
+  ['Nearest hospital / maternity unit',''],
+  ['Trusted family / support helper','']
+];
+let contacts;
+try{
+  const raw = localStorage.getItem(CONTACTS_KEY);
+  contacts = raw ? JSON.parse(raw) : null;
+}catch(e){ contacts = null; }
+if(!contacts || !Array.isArray(contacts.list)) contacts = { list: DEFAULT_CONTACTS.map(c=>c.slice()), notes:'' };
+function saveContacts(){
+  try{ localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); }catch(e){}
+  buildCheatPrint();
+}
+function buildCheat(){
+  const body = document.getElementById('cheat-body');
+  const rules = GOLDEN_RULES.map(r=>'<li>' + r + '</li>').join('');
+  const nums = KEY_NUMBERS.map(n=>'<tr><td><strong>' + n[0] + '</strong></td><td>' + n[1] + '</td></tr>').join('');
+  body.innerHTML =
+    '<h4>📞 ' + t('cheatContacts') + '</h4>' +
+    '<p style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;">' + t('cheatHint') + '</p>' +
+    '<div id="contact-rows"></div>' +
+    '<button class="btn btn-outline" id="add-contact" style="margin:8px 0 4px;">' + t('addContact') + '</button>' +
+    '<h4>⭐ ' + t('rules') + '</h4><ul class="rule-list">' + rules + '</ul>' +
+    '<h4>📏 ' + t('keyNums') + '</h4><table><tr><th>Check</th><th>Safe value / standard</th></tr>' + nums + '</table>' +
+    '<h4>📝 ' + t('myNotes') + '</h4>' +
+    '<textarea id="cheat-notes" placeholder="' + t('notesPh') + '" style="width:100%;min-height:80px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:10px 12px;font-family:\'Inter\',sans-serif;font-size:13px;resize:vertical;"></textarea>';
+  renderContactRows();
+  const notesEl = document.getElementById('cheat-notes');
+  notesEl.value = contacts.notes || '';
+  notesEl.addEventListener('input', function(){ contacts.notes = this.value; saveContacts(); });
+  document.getElementById('add-contact').addEventListener('click', function(){
+    contacts.list.push(['','']);
+    renderContactRows(); saveContacts();
+    const rows = document.querySelectorAll('#contact-rows .c-name');
+    rows[rows.length-1].focus();
+  });
+  buildCheatPrint();
+}
+function renderContactRows(){
+  const wrap = document.getElementById('contact-rows');
+  if(!wrap) return;
+  wrap.innerHTML = '';
+  const inputCss = 'border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:8px 10px;font-family:\'Inter\',sans-serif;font-size:13px;';
+  contacts.list.forEach((c, ix)=>{
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;margin-bottom:6px;align-items:center;';
+    const name = document.createElement('input');
+    name.className = 'c-name'; name.type = 'text'; name.value = c[0];
+    name.placeholder = 'Name / service'; name.style.cssText = inputCss + 'flex:1.4;min-width:0;';
+    const num = document.createElement('input');
+    num.type = 'text'; num.value = c[1];
+    num.placeholder = '+ number'; num.style.cssText = inputCss + 'flex:1;min-width:0;font-weight:700;';
+    const del = document.createElement('button');
+    del.textContent = '✕'; del.title = t('delRow');
+    del.style.cssText = 'border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);border-radius:8px;width:30px;height:34px;cursor:pointer;flex-shrink:0;';
+    name.addEventListener('input', function(){ contacts.list[ix][0] = this.value; saveContacts(); });
+    num.addEventListener('input', function(){ contacts.list[ix][1] = this.value; saveContacts(); });
+    del.addEventListener('click', function(){ contacts.list.splice(ix,1); renderContactRows(); saveContacts(); });
+    row.append(name, num, del);
+    wrap.appendChild(row);
+  });
+}
+function buildCheatPrint(){
+  const esc = s => String(s).replace(/</g,'&lt;');
+  const filled = contacts.list.filter(c=>c[0] || c[1]);
+  const chips = filled.map(h=>'<div class="cp-chip"><b>' + esc(h[0]||'—') + '</b><span>' + (esc(h[1]) || '____________') + '</span></div>').join('');
+  const rules = GOLDEN_RULES.map(r=>'<li>' + r + '</li>').join('');
+  const nums = KEY_NUMBERS.map(n=>'<tr><td><strong>' + n[0] + '</strong></td><td>' + n[1] + '</td></tr>').join('');
+  const activeQR = getSavedQR() || QR_IMAGE;
+  const qr = activeQR
+    ? '<img src="' + activeQR + '" alt="QR">'
+    : '<div class="qr-ph">' + (STORE_URL ? esc(STORE_URL) : 'Your QR<br>code here') + '</div>';
+  document.getElementById('cheat-print').innerHTML =
+    '<div class="cp-card">' +
+      '<div class="cp-head">' + ICONS.stage +
+        '<div><div class="cp-title">Safe<em>Life</em></div>' +
+        '<div class="cp-sub">' + t('cheatTitle') + ' · ' + t('heroTitle') + '</div></div>' +
+        '<div class="cp-tag">"To all moms by a mom"<br>NEBOSH &amp; OSHA trained HSE professional</div>' +
+      '</div>' +
+      '<div class="cp-contacts">' + chips + '</div>' +
+      '<div class="cp-cols">' +
+        '<div class="cp-rules"><h3>⭐ ' + t('rules') + '</h3><ul>' + rules + '</ul></div>' +
+        '<div class="cp-numsec"><h3>📏 ' + t('keyNums') + '</h3><table>' + nums + '</table></div>' +
+      '</div>' +
+      (contacts.notes ? '<div class="cp-notes"><b>' + t('myNotes') + '</b>' + esc(contacts.notes) + '</div>' : '') +
+      '<div class="cp-foot">' +
+        '<div>Made with care by <b>' + BRAND_NAME + '</b> · SafeLife Collection<br>' + t('disclaimer') + '</div>' +
+        '<div class="cp-qr">' + (STORE_URL ? '<div style="font-size:8px;">' + esc(STORE_URL) + '<br>Scan for the full collection</div>' : '') + qr + '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════
+// SELLER: per-product QR code, PIN-protected (each file's own STORE_KEY keeps these separate)
+// ═══════════════════════════════════════════
+const QR_KEY = STORE_KEY + '-qr';
+const QR_PIN_KEY = STORE_KEY + '-qrpin';
+function getSavedQR(){ try{ return localStorage.getItem(QR_KEY) || ''; }catch(e){ return ''; } }
+function sellerRenderLocked(){
+  const hasPin = !!localStorage.getItem(QR_PIN_KEY);
+  document.getElementById('seller-body').innerHTML = hasPin
+    ? '<p>Enter your PIN to manage this file\'s QR code.</p><input type="password" inputmode="numeric" maxlength="12" id="seller-pin-input" placeholder="PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:10px;">'
+      + '<div class="modal-actions"><button class="btn btn-primary" id="seller-unlock">Unlock</button></div>'
+    : '<p>No PIN set yet for this file. Create one now — you\'ll need it to change the QR code later. Every product file keeps its own separate PIN and QR code.</p>'
+      + '<input type="password" inputmode="numeric" maxlength="12" id="seller-pin-new" placeholder="Create a PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:8px;">'
+      + '<input type="password" inputmode="numeric" maxlength="12" id="seller-pin-confirm" placeholder="Confirm PIN" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);font-size:15px;letter-spacing:2px;margin-bottom:10px;">'
+      + '<div class="modal-actions"><button class="btn btn-primary" id="seller-setpin">Set PIN</button></div>';
+  if(hasPin){
+    document.getElementById('seller-unlock').addEventListener('click', function(){
+      const val = document.getElementById('seller-pin-input').value;
+      if(val && val === localStorage.getItem(QR_PIN_KEY)) sellerRenderUnlocked();
+      else alert('Incorrect PIN.');
+    });
+  } else {
+    document.getElementById('seller-setpin').addEventListener('click', function(){
+      const a = document.getElementById('seller-pin-new').value, b = document.getElementById('seller-pin-confirm').value;
+      if(!a || a.length < 4){ alert('Use at least 4 digits.'); return; }
+      if(a !== b){ alert('PINs do not match.'); return; }
+      try{ localStorage.setItem(QR_PIN_KEY, a); }catch(e){}
+      sellerRenderUnlocked();
+    });
+  }
+}
+function sellerRenderUnlocked(){
+  const current = getSavedQR();
+  document.getElementById('seller-body').innerHTML =
+    '<p>Upload this product\'s QR code image. It replaces the placeholder on the printed cheat sheet — saved on this device only, separately for every product file.</p>' +
+    (current ? '<img src="' + current + '" style="width:110px;height:110px;border:1px solid var(--line);border-radius:9px;margin-bottom:10px;object-fit:contain;background:#fff;">' : '') +
+    '<input type="file" accept="image/*" id="seller-qr-file" style="margin-bottom:10px;">' +
+    '<div class="modal-actions">' +
+      '<button class="btn btn-outline" id="seller-remove-qr">Remove QR</button>' +
+      '<button class="btn btn-outline" id="seller-change-pin">Change PIN</button>' +
+      '<button class="btn btn-primary" id="seller-done">Done</button>' +
+    '</div>';
+  document.getElementById('seller-qr-file').addEventListener('change', function(e){
+    const file = e.target.files && e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{ localStorage.setItem(QR_KEY, ev.target.result); }catch(e){}
+      buildCheatPrint();
+      sellerRenderUnlocked();
+    };
+    reader.readAsDataURL(file);
+  });
+  document.getElementById('seller-remove-qr').addEventListener('click', function(){
+    try{ localStorage.removeItem(QR_KEY); }catch(e){}
+    buildCheatPrint();
+    sellerRenderUnlocked();
+  });
+  document.getElementById('seller-change-pin').addEventListener('click', function(){
+    try{ localStorage.removeItem(QR_PIN_KEY); }catch(e){}
+    sellerRenderLocked();
+  });
+  document.getElementById('seller-done').addEventListener('click', ()=>closeModal('modal-seller'));
+}
+document.getElementById('btn-seller').addEventListener('click', function(){ sellerRenderLocked(); openModal('modal-seller'); });
+
+const MODULES = [
+  {a:'0–28 Days', owned:true},
+  {a:'1–12 Months'},
+  {a:'1–3 Years'},
+  {a:'3–6 Years'},
+  {a:'6–12 Years'},
+  {a:'13–18 Years'},
+  {a:'19–29 Years'},
+  {a:'30–44 Years'},
+  {a:'45–64 Years'},
+  {a:'65–79 Years'},
+  {a:'80–89 Years'},
+  {a:'90+ Years'}
+];
+const SITUATION_MODULES = [
+  {name:'Pregnancy', sub:'Stage 0', status:'available', emoji:'🤰'},
+  {name:'Postpartum Recovery', sub:'Situation Module', status:'available', emoji:'🌷'},
+  {name:'Grandparent-Proofing', sub:'Situation Module', status:'available', emoji:'👵'},
+  {name:'Autism & Neurodivergent Children', sub:'Situation Module', status:'available', emoji:'♾️'},
+  {name:'Emergency Preparedness', sub:'Situation Module', status:'available', emoji:'🧳'},
+  {name:'Twins & Multiples', sub:'Situation Module', status:'available', emoji:'👯'},
+  {name:'Babysitter/Nanny Handover', sub:'Situation Module', status:'available', emoji:'🗒️'},
+  {name:'Dementia & Alzheimer\'s Care', sub:'Situation Module', status:'available', emoji:'🏠'},
+  {name:'Injury & Post-Surgery Recovery', sub:'Coming Soon', status:'available', emoji:'🩹'},
+  {name:'Chronic Conditions Household', sub:'Coming Soon', status:'available', emoji:'💊'},
+  {name:'Limited Mobility / Wheelchair', sub:'Coming Soon', status:'available', emoji:'♿'},
+  {name:'Visually / Hearing Impaired', sub:'Situation Module', status:'available', emoji:'🔔'},
+  {name:'New Pet + Baby Household', sub:'Coming Soon', status:'coming', emoji:'🐾'},
+  {name:'The Caregiver\'s Own Safety', sub:'Coming Soon', status:'coming', emoji:'🤲'},
+  {name:'New Home Move-In Audit', sub:'Coming Soon', status:'coming', emoji:'🏠'},
+  {name:'Farm & Rural Household', sub:'Coming Soon', status:'coming', emoji:'🚜'},
+  {name:'Home Office / WFH', sub:'Coming Soon', status:'coming', emoji:'💻'}
+];
+function buildSituationGrid(){
+  const grid = document.getElementById('situation-grid');
+  if(!grid) return;
+  grid.innerHTML = '';
+  SITUATION_MODULES.forEach(m=>{
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const tagClass = m.status === 'coming' ? 'coming' : 'addon';
+    const tagLabel = m.status === 'coming' ? 'Coming Soon' : 'Available Separately';
+    card.innerHTML = '<span class="m-emoji">' + m.emoji + '</span><span class="m-name">' + m.name + '</span><span class="m-age">' + m.sub + '</span>' +
+      '<span class="module-tag ' + tagClass + '">' + tagLabel + '</span>';
+    grid.appendChild(card);
+  });
+}
+
+function buildCollection(){
+  const grid = document.getElementById('collection-grid');
+  grid.innerHTML = '';
+  MODULES.forEach((m, mi)=>{
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const iconIx = MODULE_ICON_IX[mi] != null ? MODULE_ICON_IX[mi] : mi;
+    card.innerHTML = '<span class="m-emoji">' + ICONS.stages[iconIx] + '</span><span class="m-name">' + t('mn'+(mi+1)) + '</span><span class="m-age">' + m.a + '</span>' +
+      '<span class="module-tag ' + (m.owned ? 'owned' : 'addon') + '">' + (m.owned ? t('owned') : t('addon')) + '</span>';
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+restore();
+injectIcons();
+document.body.dataset.theme = theme;
+document.body.dataset.mode = mode;
+document.getElementById('btn-mode').textContent = mode === 'light' ? '🌙' : '☀️';
+applyLang();
+fillStats();
+renderAll();
+buildThemeMenu();
+buildLangMenu();
+buildManual();
+buildCheat();
+buildCollection();
+buildSituationGrid();
+</script>
+</body>
+</html>
